@@ -1,0 +1,217 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2023-12-04 22:47:46.620361",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "bio_data_tab",
+  "title",
+  "column_break_pstn",
+  "first_name",
+  "column_break_mcmh",
+  "middle_name",
+  "column_break_mtro",
+  "surname",
+  "section_break_oroi",
+  "gender",
+  "column_break_buxp",
+  "date_of_birth",
+  "column_break_weiv",
+  "ghanacard_number",
+  "section_break_rvof",
+  "mobile_number",
+  "column_break_npxx",
+  "email_address",
+  "column_break_ikbl",
+  "photo",
+  "section_break_rdjq",
+  "institution",
+  "column_break_wgmi",
+  "staff_id",
+  "column_break_mrld",
+  "designation",
+  "section_break_jjuy",
+  "skills",
+  "professional_memberships"
+ ],
+ "fields": [
+  {
+   "fieldname": "title",
+   "fieldtype": "Select",
+   "label": "Title",
+   "options": "\nMr.\nMrs.\nMiss\nMs.\nDr.\nIng.\nProf.",
+   "reqd": 1
+  },
+  {
+   "fieldname": "first_name",
+   "fieldtype": "Data",
+   "label": "First Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "middle_name",
+   "fieldtype": "Data",
+   "label": "Middle Name"
+  },
+  {
+   "fieldname": "surname",
+   "fieldtype": "Data",
+   "label": "Surname",
+   "reqd": 1
+  },
+  {
+   "fieldname": "date_of_birth",
+   "fieldtype": "Date",
+   "label": "Date of Birth",
+   "reqd": 1
+  },
+  {
+   "fieldname": "mobile_number",
+   "fieldtype": "Data",
+   "label": "Mobile Number",
+   "options": "Phone",
+   "reqd": 1
+  },
+  {
+   "fieldname": "institution",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Institution",
+   "reqd": 1
+  },
+  {
+   "fieldname": "staff_id",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Staff ID",
+   "reqd": 1
+  },
+  {
+   "fieldname": "designation",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Designation",
+   "reqd": 1
+  },
+  {
+   "fieldname": "skills",
+   "fieldtype": "Text Editor",
+   "label": "Skills/Expertise"
+  },
+  {
+   "fieldname": "professional_memberships",
+   "fieldtype": "Table",
+   "label": "Professional Memberships",
+   "options": "PS Professional Membership"
+  },
+  {
+   "fieldname": "bio_data_tab",
+   "fieldtype": "Tab Break",
+   "label": "Bio Data"
+  },
+  {
+   "fieldname": "column_break_mcmh",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_mtro",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "gender",
+   "fieldtype": "Select",
+   "label": "Gender",
+   "options": "\nFemale\nMale",
+   "reqd": 1
+  },
+  {
+   "fieldname": "email_address",
+   "fieldtype": "Data",
+   "label": "Email Address",
+   "options": "Email",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_wgmi",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_mrld",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_jjuy",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "section_break_oroi",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_buxp",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_weiv",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_rdjq",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "section_break_rvof",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_npxx",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_ikbl",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "photo",
+   "fieldtype": "Attach Image",
+   "label": "Photo"
+  },
+  {
+   "fieldname": "column_break_pstn",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "ghanacard_number",
+   "fieldtype": "Data",
+   "label": "GhanaCard Number",
+   "reqd": 1
+  }
+ ],
+ "image_field": "photo",
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2023-12-06 21:04:10.659448",
+ "modified_by": "Administrator",
+ "module": "PuSMAG",
+ "name": "PS Member Registration",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

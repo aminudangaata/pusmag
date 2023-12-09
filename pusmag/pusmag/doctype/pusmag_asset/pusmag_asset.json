@@ -1,0 +1,67 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "P.#####",
+ "creation": "2023-11-21 11:57:21.704566",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "page_name",
+  "column_break_yvee",
+  "route",
+  "section_break_ufin",
+  "page_content"
+ ],
+ "fields": [
+  {
+   "fieldname": "page_name",
+   "fieldtype": "Data",
+   "label": "Page Name"
+  },
+  {
+   "fieldname": "section_break_ufin",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "page_content",
+   "fieldtype": "Table",
+   "label": "Page Content",
+   "options": "Image Gallery"
+  },
+  {
+   "fieldname": "column_break_yvee",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "route",
+   "fieldtype": "Data",
+   "label": "Route"
+  }
+ ],
+ "links": [],
+ "modified": "2023-11-21 12:20:00.956669",
+ "modified_by": "Administrator",
+ "module": "PuSMAG",
+ "name": "PuSMAG Asset",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

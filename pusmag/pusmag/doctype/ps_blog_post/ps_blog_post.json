@@ -1,0 +1,104 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:route",
+ "creation": "2023-12-05 09:40:18.902128",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "post_title",
+  "post_category",
+  "route",
+  "column_break_laup",
+  "post_author",
+  "published_date",
+  "post_image",
+  "section_break_hpyh",
+  "post_content"
+ ],
+ "fields": [
+  {
+   "fieldname": "post_title",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Post Title",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "post_category",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Post Category",
+   "options": "\nGeneral\nRamadan\nBrotherhood\nCharity\nBusiness\nJurisprudence\nNews",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_laup",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "post_author",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Post Author",
+   "reqd": 1
+  },
+  {
+   "default": "Today",
+   "fieldname": "published_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Published Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_hpyh",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "post_content",
+   "fieldtype": "Text Editor",
+   "label": "Post Content",
+   "reqd": 1
+  },
+  {
+   "fieldname": "post_image",
+   "fieldtype": "Attach Image",
+   "label": "Post Image"
+  },
+  {
+   "fieldname": "route",
+   "fieldtype": "Data",
+   "label": "Route",
+   "unique": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2023-12-06 12:18:17.320814",
+ "modified_by": "Administrator",
+ "module": "PuSMAG",
+ "name": "PS Blog Post",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "show_title_field_in_link": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "post_title"
+}

@@ -1,0 +1,9 @@
+.form-section.card-section, .form-dashboard-section {
+    border-bottom: 0px solid var(--border-color);
+}
+
+@media (max-width: 576px) {
+    .form-column:not(:last-child) {
+        border-bottom: 0px solid var(--border-color);
+    }
+}

@@ -1,0 +1,52 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2023-11-20 14:53:15.046535",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "title",
+  "subtitle",
+  "button_text",
+  "background_image"
+ ],
+ "fields": [
+  {
+   "fieldname": "title",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Title"
+  },
+  {
+   "fieldname": "subtitle",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Subtitle"
+  },
+  {
+   "fieldname": "button_text",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Button Text"
+  },
+  {
+   "fieldname": "background_image",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Background Image"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2023-11-20 15:40:58.924535",
+ "modified_by": "Administrator",
+ "module": "PuSMAG",
+ "name": "Image Gallery",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

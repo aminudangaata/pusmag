@@ -1,0 +1,76 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "format:PS-IMG-{#######}",
+ "creation": "2023-12-04 08:43:59.628643",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "image_title",
+  "image_category",
+  "column_break_wnve",
+  "image_link",
+  "image_preview"
+ ],
+ "fields": [
+  {
+   "depends_on": "eval:doc.image_link",
+   "fieldname": "image_preview",
+   "fieldtype": "Image",
+   "label": "Image Preview",
+   "options": "image_link"
+  },
+  {
+   "fieldname": "column_break_wnve",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "image_link",
+   "fieldtype": "Attach Image",
+   "label": "Image Link",
+   "reqd": 1
+  },
+  {
+   "fieldname": "image_category",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Image Category",
+   "options": "\nInauguration\nVisit\nMeeting\nEvent",
+   "reqd": 1
+  },
+  {
+   "fieldname": "image_title",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Image Title"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2023-12-04 21:59:43.673138",
+ "modified_by": "Administrator",
+ "module": "PuSMAG",
+ "name": "PS Gallery",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "image_title"
+}
