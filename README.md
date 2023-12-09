@@ -1,7 +1,3 @@
 ## PuSMAG
 
-PuSMAG Website
-
-#### License
-
-mit
+PuSMAG Web App
