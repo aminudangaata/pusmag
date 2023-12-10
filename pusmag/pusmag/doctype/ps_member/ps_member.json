@@ -34,8 +34,7 @@
   "section_break_kthw",
   "skills",
   "section_break_amkl",
-  "professional_membership",
-  "contributions_tab"
+  "professional_membership"
  ],
  "fields": [
   {
@@ -193,16 +192,11 @@
    "fieldname": "member_details_tab",
    "fieldtype": "Tab Break",
    "label": "Member Details"
-  },
-  {
-   "fieldname": "contributions_tab",
-   "fieldtype": "Tab Break",
-   "label": "Contributions"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-12-09 13:11:29.776213",
+ "modified": "2023-12-10 19:06:46.432258",
  "modified_by": "Administrator",
  "module": "PuSMAG",
  "name": "PS Member",
