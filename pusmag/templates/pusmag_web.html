@@ -2076,6 +2076,16 @@
 
 
     </script>
+    <script>
+        window.onload = function() {
+          var elementToClick = document.querySelector('li[data-filter="*"]');
+          
+          if (elementToClick) {
+            elementToClick.click();
+          }
+        };
+        </script>
+        
     <style>
         .register-btn.btn-icon-solid .btn-icon {
             background: rgb(255, 255, 255);
