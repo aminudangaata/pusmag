@@ -106,7 +106,8 @@
    "fieldname": "ghanacard_number",
    "fieldtype": "Data",
    "label": "GhanaCard Number",
-   "reqd": 1
+   "reqd": 1,
+   "unique": 1
   },
   {
    "fieldname": "section_break_tubt",
@@ -196,7 +197,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-12-10 19:06:46.432258",
+ "modified": "2023-12-22 11:54:24.796107",
  "modified_by": "Administrator",
  "module": "PuSMAG",
  "name": "PS Member",

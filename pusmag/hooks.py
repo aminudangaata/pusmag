@@ -24,6 +24,10 @@ website_route_rules = [
     }
 ]
 
+fixtures = [
+    {"dt": "PS Blog Post"},
+    {"dt": "PS Gallery"}
+]
 # include custom scss in every website theme (without file extension ".scss")
 # website_theme_scss = "pusmag/public/scss/website"
 
