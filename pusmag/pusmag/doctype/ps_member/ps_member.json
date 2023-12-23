@@ -1,6 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "format:{######}",
  "creation": "2023-12-09 11:07:01.288621",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -197,10 +198,11 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-12-22 11:54:24.796107",
+ "modified": "2023-12-23 07:39:27.162595",
  "modified_by": "Administrator",
  "module": "PuSMAG",
  "name": "PS Member",
+ "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [
   {
