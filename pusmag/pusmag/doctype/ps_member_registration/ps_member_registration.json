@@ -7,7 +7,9 @@
  "engine": "InnoDB",
  "field_order": [
   "bio_data_tab",
-  "notification_sent",
+  "email_sent",
+  "column_break_sskb",
+  "sms_sent",
   "section_break_lsjq",
   "title",
   "column_break_pstn",
@@ -171,8 +173,7 @@
   {
    "fieldname": "photo",
    "fieldtype": "Attach Image",
-   "label": "Photo",
-   "reqd": 1
+   "label": "Photo"
   },
   {
    "fieldname": "column_break_pstn",
@@ -192,20 +193,30 @@
    "reqd": 1
   },
   {
-   "default": "0",
-   "fieldname": "notification_sent",
-   "fieldtype": "Check",
-   "label": "SMS & Email Sent"
-  },
-  {
    "fieldname": "section_break_lsjq",
    "fieldtype": "Section Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "email_sent",
+   "fieldtype": "Check",
+   "label": "Email Sent"
+  },
+  {
+   "fieldname": "column_break_sskb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "sms_sent",
+   "fieldtype": "Check",
+   "label": "SMS Sent"
   }
  ],
  "image_field": "photo",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-12-31 08:47:36.319516",
+ "modified": "2023-12-31 11:03:29.376194",
  "modified_by": "Administrator",
  "module": "PuSMAG",
  "name": "PS Member Registration",

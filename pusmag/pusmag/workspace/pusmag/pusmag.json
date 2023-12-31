@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"-Y002zXQNI\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Verse Quote\",\"col\":12}},{\"id\":\"CZNygk0M4y\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Members\",\"col\":3}},{\"id\":\"RgqVtGbaj2\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Contributions\",\"col\":3}}]",
+ "content": "[{\"id\":\"-Y002zXQNI\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Verse Quote\",\"col\":12}},{\"id\":\"CZNygk0M4y\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Members\",\"col\":4}},{\"id\":\"RgqVtGbaj2\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Contributions\",\"col\":4}},{\"id\":\"dUmnktPh2D\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Registrations\",\"col\":4}}]",
  "creation": "2023-12-31 07:38:05.958842",
  "custom_blocks": [
   {
@@ -18,7 +18,7 @@
  "is_hidden": 0,
  "label": "PuSMAG",
  "links": [],
- "modified": "2023-12-31 07:45:52.490780",
+ "modified": "2023-12-31 09:24:03.245331",
  "modified_by": "Administrator",
  "module": "PuSMAG",
  "name": "PuSMAG",
@@ -35,6 +35,14 @@
    "doc_view": "List",
    "label": "Members",
    "link_to": "PS Member",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Registrations",
+   "link_to": "PS Member Registration",
    "stats_filter": "[]",
    "type": "DocType"
   },
