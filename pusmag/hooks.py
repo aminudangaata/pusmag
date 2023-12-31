@@ -27,7 +27,14 @@ website_route_rules = [
 fixtures = [
     {"dt": "PS Blog Post"},
     {"dt": "PS Gallery"},
-    {"dt": "Region of Ghana"}
+    {"dt": "Region of Ghana"},
+    {"dt": "Notification", "filters": [
+        [
+            "document_type", "in", [
+                "PS Member Registration"
+            ]
+        ]
+    ]}
 ]
 # include custom scss in every website theme (without file extension ".scss")
 # website_theme_scss = "pusmag/public/scss/website"

@@ -1,0 +1,51 @@
+{
+ "charts": [],
+ "content": "[{\"id\":\"-Y002zXQNI\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Verse Quote\",\"col\":12}},{\"id\":\"CZNygk0M4y\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Members\",\"col\":3}},{\"id\":\"RgqVtGbaj2\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Contributions\",\"col\":3}}]",
+ "creation": "2023-12-31 07:38:05.958842",
+ "custom_blocks": [
+  {
+   "custom_block_name": "Verse Quote",
+   "label": "Verse Quote"
+  }
+ ],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "permission",
+ "idx": 0,
+ "indicator_color": "",
+ "is_hidden": 0,
+ "label": "PuSMAG",
+ "links": [],
+ "modified": "2023-12-31 07:45:52.490780",
+ "modified_by": "Administrator",
+ "module": "PuSMAG",
+ "name": "PuSMAG",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 33.0,
+ "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Members",
+   "link_to": "PS Member",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Contributions",
+   "link_to": "PS Contribution",
+   "stats_filter": "[]",
+   "type": "DocType"
+  }
+ ],
+ "title": "PuSMAG"
+}
