@@ -29,13 +29,13 @@
   "section_break_akge",
   "institution",
   "column_break_zohu",
-  "staff_id",
-  "column_break_hklp",
   "designation",
+  "column_break_hklp",
+  "region",
   "section_break_kthw",
   "skills",
   "section_break_amkl",
-  "professional_membership"
+  "professional_memberships"
  ],
  "fields": [
   {
@@ -43,7 +43,7 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Title",
-   "options": "\nMr.\nMrs.\nMiss\nMs.\nDr.\nIng.\nProf.",
+   "options": "\nMr.\nMrs.\nMiss\nMs.\nDr.\nIng.\nProf.\nAlhaji\nHajia",
    "reqd": 1
   },
   {
@@ -156,12 +156,6 @@
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "staff_id",
-   "fieldtype": "Data",
-   "label": "Staff ID",
-   "reqd": 1
-  },
-  {
    "fieldname": "column_break_hklp",
    "fieldtype": "Column Break"
   },
@@ -185,20 +179,27 @@
    "fieldtype": "Section Break"
   },
   {
-   "fieldname": "professional_membership",
-   "fieldtype": "Table",
-   "label": "Professional Membership",
-   "options": "PS Professional Membership"
-  },
-  {
    "fieldname": "member_details_tab",
    "fieldtype": "Tab Break",
    "label": "Member Details"
+  },
+  {
+   "fieldname": "region",
+   "fieldtype": "Link",
+   "label": "Region",
+   "options": "Region of Ghana",
+   "reqd": 1
+  },
+  {
+   "fieldname": "professional_memberships",
+   "fieldtype": "Table",
+   "label": "Professional Memberships",
+   "options": "PS Professional Membership"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-12-23 07:39:27.162595",
+ "modified": "2023-12-31 15:34:05.732767",
  "modified_by": "Administrator",
  "module": "PuSMAG",
  "name": "PS Member",

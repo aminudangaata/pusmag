@@ -86,13 +86,6 @@
  {
   "docstatus": 0,
   "doctype": "Region of Ghana",
-  "modified": "2023-12-23 17:12:41.835855",
-  "name": "Northern Region",
-  "region": "Northern Region"
- },
- {
-  "docstatus": 0,
-  "doctype": "Region of Ghana",
   "modified": "2023-12-23 17:13:00.314662",
   "name": "North East Region",
   "region": "North East Region"
@@ -110,5 +103,12 @@
   "modified": "2023-12-23 17:13:29.629443",
   "name": "Upper West Region",
   "region": "Upper West Region"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Region of Ghana",
+  "modified": "2023-12-23 17:12:41.835855",
+  "name": "Northern Region",
+  "region": "Northern Region"
  }
 ]
