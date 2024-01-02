@@ -8,10 +8,8 @@
  "field_order": [
   "bio_data_tab",
   "email_sent",
-  "approved",
   "column_break_sskb",
   "sms_sent",
-  "rejected",
   "section_break_lsjq",
   "title",
   "column_break_pstn",
@@ -241,26 +239,12 @@
    "fieldtype": "Small Text",
    "label": "Rejection Reason",
    "mandatory_depends_on": "eval:doc.status == \"Rejected\""
-  },
-  {
-   "default": "0",
-   "fieldname": "approved",
-   "fieldtype": "Check",
-   "hidden": 1,
-   "label": "Approved"
-  },
-  {
-   "default": "0",
-   "fieldname": "rejected",
-   "fieldtype": "Check",
-   "hidden": 1,
-   "label": "Rejected"
   }
  ],
  "image_field": "photo",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-01-01 11:08:41.266773",
+ "modified": "2024-01-02 09:29:05.370169",
  "modified_by": "Administrator",
  "module": "PuSMAG",
  "name": "PS Member Registration",
