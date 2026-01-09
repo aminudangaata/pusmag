@@ -37,7 +37,7 @@ window.filterBlogCategory = async (category, element) => {
   await fetchAndRenderPosts()
 }
 
-window.handleBlogSearch = (value) => {
+window.handlePublicBlogSearch = (value) => {
   clearTimeout(searchTimeout)
   searchTimeout = setTimeout(async () => {
     currentFilters.search = value
@@ -231,7 +231,7 @@ export async function BlogPage() {
                         <input 
                             type="text" 
                             id="blog-search"
-                            oninput="window.handleBlogSearch(this.value)"
+                            oninput="window.handlePublicBlogSearch(this.value)"
                             placeholder="Search articles..." 
                             class="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-2.5 text-sm text-white placeholder-neutral-500 focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all"
                         >

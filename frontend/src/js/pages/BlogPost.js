@@ -31,7 +31,7 @@ export async function BlogPostPage(params) {
             <div class="absolute inset-0 z-0">
                 <img src="${post.image}" alt="${post.title}" class="w-full h-full object-cover">
                 <!-- Dark Overlay with adjusted opacity -->
-                <div class="absolute inset-0 bg-black/80 backdrop-blur-sm"></div>
+                <div class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
             </div>
         ` : `
             <div class="absolute inset-0 z-0 bg-neutral-900">

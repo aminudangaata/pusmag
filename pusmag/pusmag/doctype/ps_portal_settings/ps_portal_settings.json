@@ -1,0 +1,43 @@
+{
+    "actions": [],
+    "allow_rename": 1,
+    "creation": "2026-01-08 10:15:00.000000",
+    "doctype": "DocType",
+    "engine": "InnoDB",
+    "field_order": [
+        "two_factor_method"
+    ],
+    "fields": [
+        {
+            "fieldname": "two_factor_method",
+            "fieldtype": "Select",
+            "label": "Two Factor Method",
+            "options": "Email\nSMS",
+            "reqd": 1,
+            "default": "Email"
+        }
+    ],
+    "issingle": 1,
+    "modified": "2026-01-08 10:15:00.000000",
+    "modified_by": "Administrator",
+    "module": "PuSMAG",
+    "name": "PS Portal Settings",
+    "owner": "Administrator",
+    "permissions": [
+        {
+            "create": 1,
+            "delete": 1,
+            "email": 1,
+            "export": 1,
+            "print": 1,
+            "read": 1,
+            "report": 1,
+            "role": "System Manager",
+            "share": 1,
+            "write": 1
+        }
+    ],
+    "sort_field": "modified",
+    "sort_order": "DESC",
+    "states": []
+}

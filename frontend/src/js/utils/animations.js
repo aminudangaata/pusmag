@@ -31,6 +31,9 @@ export function initAnimations() {
         observer.observe(el)
     })
 
+    // Auto-init lazy loading
+    initLazyLoading()
+
     // Store for cleanup
     window.animationObserver = observer
 }
@@ -111,4 +114,36 @@ export function initParallax() {
             el.style.transform = `translateY(${scrolled * speed}px)`
         })
     })
+}
+
+// Lazy loading for images
+export function initLazyLoading() {
+    const images = document.querySelectorAll('img[data-src]')
+
+    const imageObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const img = entry.target
+                img.src = img.dataset.src
+
+                const handleLoad = () => {
+                    img.classList.add('opacity-100')
+                    img.classList.remove('opacity-0')
+                    img.removeAttribute('data-src')
+                }
+
+                if (img.complete) {
+                    handleLoad()
+                } else {
+                    img.onload = handleLoad
+                }
+                observer.unobserve(img)
+            }
+        })
+    }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px 200px 0px'
+    })
+
+    images.forEach(img => imageObserver.observe(img))
 }

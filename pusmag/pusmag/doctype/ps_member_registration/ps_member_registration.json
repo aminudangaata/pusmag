@@ -40,6 +40,7 @@
   "skills",
   "professional_memberships",
   "verification_section",
+  "verified",
   "status",
   "column_break_izvo",
   "rejection_reason"
@@ -239,12 +240,18 @@
    "fieldtype": "Small Text",
    "label": "Rejection Reason",
    "mandatory_depends_on": "eval:doc.status == \"Rejected\""
+  },
+  {
+   "default": "0",
+   "fieldname": "verified",
+   "fieldtype": "Check",
+   "label": "Verified"
   }
  ],
  "image_field": "photo",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-01-02 09:29:05.370169",
+ "modified": "2026-01-07 15:28:03.701940",
  "modified_by": "Administrator",
  "module": "PuSMAG",
  "name": "PS Member Registration",

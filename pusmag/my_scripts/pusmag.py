@@ -187,7 +187,7 @@ def get_blog_posts(filters=None, limit=20, offset=0):
             filters = json.loads(filters)
         
         # Build query filters
-        query_filters = {}
+        query_filters = {"published": 1}
         if filters:
             if filters.get('category'):
                 query_filters['post_category'] = filters['category']
@@ -214,15 +214,17 @@ def get_blog_posts(filters=None, limit=20, offset=0):
                 import re
                 content_text = re.sub('<[^<]+?>', '', doc.post_content or '')
                 excerpt = content_text[:200] + '...' if len(content_text) > 200 else content_text
+                author_name = frappe.db.get_value("User", post.post_author, "full_name") or post.post_author
             except:
                 excerpt = ""
+                author_name = post.post_author
             
             result.append({
                 "id": post.route or post.name,
                 "title": post.post_title,
                 "excerpt": excerpt,
                 "category": post.post_category,
-                "author": post.post_author,
+                "author": author_name,
                 "date": str(post.published_date) if post.published_date else "",
                 "image": post.post_image,
                 "route": post.route
@@ -247,12 +249,14 @@ def get_blog_post(post_id):
         if not post:
             return {}
         
+        author_name = frappe.db.get_value("User", post.post_author, "full_name") or post.post_author
+        
         return {
             "id": post.route or post.name,
             "title": post.post_title,
             "content": post.post_content,
             "category": post.post_category,
-            "author": post.post_author,
+            "author": author_name,
             "date": str(post.published_date) if post.published_date else "",
             "image": post.post_image,
             "route": post.route

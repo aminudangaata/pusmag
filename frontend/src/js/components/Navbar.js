@@ -1,4 +1,5 @@
 import { BASE_PATH } from '../utils/constants.js'
+import { router } from '../utils/router.js'
 
 export function Navbar(currentPath) {
   // Helper to join paths correctly
@@ -28,6 +29,8 @@ export function Navbar(currentPath) {
 
   const isActive = (path) => currentPath === path ? 'text-white' : 'text-neutral-400'
   const isParentActive = (children) => children.some(child => child.path === currentPath) ? 'text-white' : 'text-neutral-400'
+
+  const user = router.user;
 
   return `
     <nav class="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-xl border-b border-white/10">
@@ -71,9 +74,26 @@ export function Navbar(currentPath) {
 
           <!-- CTA Button -->
           <div class="hidden md:flex items-center gap-6">
-            <a href="${getPath('/register')}" class="btn-custom">
-              <span class="inner">Register</span>
-            </a>
+            ${user ? `
+              <div class="flex items-center gap-4">
+                <a href="${getPath('/portal')}" class="text-xs font-medium tracking-widest uppercase hover:text-white transition-colors ${currentPath.startsWith(getPath('/portal')) ? 'text-white' : 'text-neutral-400'}">
+                    Portal
+                </a>
+                <button onclick="window.handleLogout()" class="text-xs font-medium tracking-widest uppercase text-red-500/80 hover:text-red-500 transition-colors">
+                    Logout
+                </button>
+                <div class="w-8 h-8 rounded-full border border-white/10 overflow-hidden">
+                    <img src="${user.user_image || '/files/default-avatar-white.svg'}" class="w-full h-full object-cover">
+                </div>
+              </div>
+            ` : `
+              <a href="${getPath('/register')}" class="btn-custom">
+                <span class="inner">Register</span>
+              </a>
+              <a href="${getPath('/login')}" class="text-xs font-medium tracking-widest uppercase hover:text-white transition-colors">
+                Login
+              </a>
+            `}
           </div>
 
           <!-- Mobile Menu Button -->
@@ -107,11 +127,17 @@ export function Navbar(currentPath) {
                 </a>
               `
   }).join('')}
-          <a href="${getPath('/register')}" class="block mt-4">
-            <span class="btn-custom inline-block">
-              <span class="inner">Register</span>
-            </span>
-          </a>
+          ${user ? `
+            <a href="${getPath('/portal')}" class="block py-3 text-sm font-medium hover:text-white transition-colors border-b border-white/5">Portal</a>
+            <button onclick="window.handleLogout()" class="block py-3 text-sm font-medium text-red-500 hover:text-red-400 transition-colors">Logout</button>
+          ` : `
+            <a href="${getPath('/register')}" class="block mt-4">
+                <span class="btn-custom inline-block">
+                <span class="inner">Register</span>
+                </span>
+            </a>
+            <a href="${getPath('/login')}" class="block py-3 text-sm font-medium text-neutral-400 hover:text-white transition-colors">Login</a>
+          `}
         </div>
       </div>
     </nav>

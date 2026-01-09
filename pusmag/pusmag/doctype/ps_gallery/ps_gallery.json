@@ -47,9 +47,10 @@
    "label": "Image Title"
   }
  ],
+ "image_field": "image_link",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-12-04 21:59:43.673138",
+ "modified": "2026-01-08 14:08:23.222722",
  "modified_by": "Administrator",
  "module": "PuSMAG",
  "name": "PS Gallery",

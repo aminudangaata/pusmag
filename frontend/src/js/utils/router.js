@@ -13,6 +13,8 @@ import { BlogPostPage } from '../pages/BlogPost.js'
 import { GalleryPage } from '../pages/Gallery.js'
 import { ContactPage } from '../pages/Contact.js'
 import { RegisterPage } from '../pages/Register.js'
+import { LoginPage } from '../pages/Login.js'
+import { PortalPage } from '../pages/Portal.js'
 import { Navbar } from '../components/Navbar.js'
 import { Footer } from '../components/Footer.js'
 import { initAnimations } from '../utils/animations.js'
@@ -34,29 +36,40 @@ const routes = {
     '/gallery': GalleryPage,
     '/contact': ContactPage,
     '/register': RegisterPage,
+    '/login': LoginPage,
+    '/portal': PortalPage,
+    '/portal/:section': PortalPage,
+    '/portal/member/:name': PortalPage,
 }
 
 class Router {
     constructor() {
         this.currentPath = window.location.pathname
+        this.user = null
     }
 
-    init() {
-        this.handleRoute()
+    async init() {
+        await this.handleRoute()
     }
 
-    navigate(path) {
+    async navigate(path) {
+        if (path === window.location.pathname) return
         window.history.pushState({}, '', path)
         this.currentPath = path
-        this.handleRoute()
+        await this.handleRoute()
     }
 
-    handleRoute() {
+    async handleRoute() {
         let path = window.location.pathname
 
         // Strip base path if present
         if (path.startsWith(BASE_PATH)) {
             path = path.substring(BASE_PATH.length)
+        }
+
+        // Remove trailing slash if not root
+        if (path.length > 1 && path.endsWith('/')) {
+            path = path.slice(0, -1)
         }
 
         // Ensure path starts with /
@@ -65,6 +78,16 @@ class Router {
         }
 
         this.currentPath = path
+
+        // Ensure user is loaded before route guards
+        if (!this.user && !['/login', '/register', '/ps/login', '/ps/register'].includes(path)) {
+            try {
+                const { api } = await import('./api.js')
+                this.user = await api.getUserInfo()
+            } catch (e) {
+                this.user = null
+            }
+        }
 
         // Find matching route
         let matchedRoute = null
@@ -77,6 +100,13 @@ class Router {
                 params = match.params
                 break
             }
+        }
+
+        // Auth Check for Protected Routes
+        if (path.startsWith('/portal') && !this.user) {
+            console.log('Access denied. Redirecting to login.')
+            this.navigate('/login')
+            return
         }
 
         // Render page
@@ -119,20 +149,20 @@ class Router {
     async render(PageComponent, params = {}) {
         const app = document.getElementById('app')
 
-        // First render layout with navbar and footer to ensure UI is visible quickly
-        // Check if layout already exists to avoid re-rendering navbar
+        // Render layout
         if (!document.getElementById('navbar')) {
             app.innerHTML = `
               <div id="navbar"></div>
               <main id="main-content" class="min-h-screen"></main>
               <div id="footer"></div>
             `
-            const navbarEl = document.getElementById('navbar')
-            navbarEl.innerHTML = Navbar(window.location.pathname) // Pass full path to Navbar
-
             const footerEl = document.getElementById('footer')
             footerEl.innerHTML = Footer()
         }
+
+        // Always refresh Navbar to reflect potential user state changes
+        const navbarEl = document.getElementById('navbar')
+        navbarEl.innerHTML = Navbar(window.location.pathname)
 
         // Render component
         const mainEl = document.getElementById('main-content')

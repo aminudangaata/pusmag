@@ -66,7 +66,7 @@ export async function HomePage() {
                 <span class="gradient-text">Excellence & Integrity.</span>
               </h1>
 
-              <p class="leading-relaxed text-lg font-medium text-white/60 max-w-lg mb-10 animate-on-scroll" style="animation-delay: 0.35s">
+              <p class="leading-relaxed text-lg text-white/60 max-w-lg mb-10 animate-on-scroll" style="animation-delay: 0.35s">
                 Public Services Muslims Association of Ghana - Building a community of dedicated Muslim public servants committed to excellence and integrity.
               </p>
 
@@ -163,7 +163,7 @@ export async function HomePage() {
           <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
             ${statistics.map((stat, index) => `
               <div class="text-center animate-on-scroll" style="animation-delay: ${index * 0.1}s">
-                <div class="text-5xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary-500 to-accent-500 mb-2 counter" data-target="${stat.value}">
+                <div class="text-5xl md:text-6xl font-bold text-white mb-2 counter" data-target="${stat.value}">
                   0
                 </div>
                 <div class="text-neutral-400 text-sm uppercase tracking-wider">${stat.label}</div>
@@ -174,10 +174,20 @@ export async function HomePage() {
       </section>
 
       <!-- CTA Section -->
-      <section class="section-padding bg-gradient-to-br from-primary-500/10 to-accent-500/10">
-        <div class="container-custom">
+      <section class="section-padding relative overflow-hidden">
+        <!-- Unique Blue Mesh Background -->
+        <div class="absolute inset-0 bg-neutral-950"></div>
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_0%_0%,rgba(14,165,233,0.15),transparent_50%)]"></div>
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_100%_100%,rgba(59,130,246,0.15),transparent_50%)]"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(30,58,138,0.2),transparent_70%)]"></div>
+        
+        <!-- Decorative subtle grid or pattern could go here, but blobs are better -->
+        <div class="absolute -top-24 -right-24 w-96 h-96 bg-accent-500/10 rounded-full blur-3xl animate-pulse-slow"></div>
+        <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl animate-pulse-slow" style="animation-delay: 2s"></div>
+
+        <div class="container-custom relative z-10">
           <div class="max-w-3xl mx-auto text-center animate-on-scroll">
-            <h2 class="text-4xl md:text-5xl font-bold mb-6">
+            <h2 class="text-4xl md:text-5xl font-bold mb-6 text-white">
               Ready to Join Our Community?
             </h2>
             <p class="text-xl text-neutral-400 mb-10">

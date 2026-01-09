@@ -1,4 +1,5 @@
 import { api } from '../utils/api.js'
+import { initLazyLoading } from '../utils/animations.js'
 
 export async function GalleryPage() {
   let images = []
@@ -56,7 +57,7 @@ export async function GalleryPage() {
                    data-category="${image.category}"
                    style="animation: fadeIn 0.5s ease-out ${index * 0.05}s backwards;">
                 ${image.image_url ?
-      `<img src="${image.image_url}" alt="${image.title}" class="w-full h-auto object-cover transition-transform duration-700 hover:scale-110" loading="lazy">` :
+      `<img data-src="${image.image_url}" alt="${image.title}" class="w-full h-auto object-cover transition-all duration-700 hover:scale-110 opacity-0" loading="lazy">` :
       `<div class="w-full aspect-square bg-gradient-to-br from-primary-500/20 to-accent-500/20 flex items-center justify-center">
                        <svg class="w-16 h-16 text-primary-500/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>

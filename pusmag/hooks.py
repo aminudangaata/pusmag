@@ -18,6 +18,7 @@ app_include_css = "/assets/pusmag/pusmag/css/app.css"
 # web_include_js = "/assets/pusmag/js/pusmag.js"
 
 website_route_rules = [
+    # {'from_route': '/login', 'to_route': 'ps', 'defaults': {'app_path': 'login'}},
     {'from_route': '/pusmag_post/<docname>', 'to_route': 'pusmag_post'},
     {'from_route': '/ps/<path:app_path>', 'to_route': 'ps'},
 ]

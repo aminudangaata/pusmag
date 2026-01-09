@@ -19,9 +19,12 @@ window.onerror = function (msg, url, line, col, error) {
 try {
 
   // Initialize the application
-  document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('DOMContentLoaded', async () => {
+    // Make router globally accessible for inline onclick handlers
+    window.router = router
+
     // Initialize router
-    router.init()
+    await router.init()
 
     // Initialize scroll animations
     initAnimations()
@@ -37,8 +40,8 @@ try {
     })
 
     // Handle browser back/forward
-    window.addEventListener('popstate', () => {
-      router.handleRoute()
+    window.addEventListener('popstate', async () => {
+      await router.handleRoute()
     })
   })
 } catch (error) {
