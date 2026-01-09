@@ -375,8 +375,8 @@ def get_contact_info():
     """Returns organization contact information"""
     try:
         return {
-            "phone": "+(233) 302 767 651",
-            "email": "info@psmagh.org",
+            "phone": "+(233) 50 175 6250",
+            "email": "info@pusmag.org",
             "office_hours": "Monday - Friday: 8am-5pm",
             "address": "Accra, Ghana"
         }

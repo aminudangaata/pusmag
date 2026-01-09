@@ -1,11 +1,16 @@
 import frappe
 from frappe.model.document import Document
 from frappe.utils import random_string
+from frappe.core.doctype.sms_settings.sms_settings import send_sms
 
 class PSMemberRegistration(Document):
     def on_update(self):
         if self.status == "Approved" and not self.verified:
             self.create_member_and_user()
+            
+    def validate(self):
+        if self.mobile_number:
+            self.mobile_number = self.normalize_ghana_number(self.mobile_number)
 
     def create_member_and_user(self):
         # 1. Create User
@@ -16,6 +21,7 @@ class PSMemberRegistration(Document):
                 "first_name": self.first_name,
                 "middle_name": self.middle_name,
                 "last_name": self.surname,
+                "mobile_no": self.mobile_number,
                 "enabled": 1,
                 "send_welcome_email": 1,
                 "user_type": "Website User"
@@ -60,6 +66,71 @@ class PSMemberRegistration(Document):
         # 3. Mark as verified to avoid re-triggering
         self.db_set("verified", 1)
         frappe.db.commit()
+    
+    def after_insert(self):
+        """
+        Send registration Email and SMS once after record creation.
+        """
+
+        # ---- EMAIL ----
+        if not self.email_sent and self.email_address:
+            self.send_registration_email()
+            self.db_set("email_sent", 1, update_modified=False)
+
+        # ---- SMS ----
+        if not self.sms_sent and self.mobile_number:
+            self.send_registration_sms()
+            self.db_set("sms_sent", 1, update_modified=False)
+
+    # ---------------------------------------------------------------------
+
+    def send_registration_email(self):
+        """
+        Sends the registration confirmation email
+        using the existing HTML template.
+        """
+
+        html_message = frappe.render_template(
+            "pusmag/templates/emails/member_registration.html",
+            {"doc": self}
+        )
+
+        frappe.sendmail(
+            recipients=[self.email_address],
+            subject="Thank you for registering with PuSMAG",
+            message=html_message,
+            sender="PuSMAG Notification <notification@pusmag.org>"
+        )
+
+    # ---------------------------------------------------------------------
+
+    def send_registration_sms(self):
+        """
+        Sends the registration confirmation SMS.
+        """
+
+        sms_message = (
+            f"Salaam {self.title} {self.surname},\n"
+            "Your application has been received. "
+            "We will process your application and reach out to you inshaa Allah"
+        )
+
+        # Replace this with your actual SMS gateway function
+        send_sms(
+            receiver_list=[self.normalize_ghana_number(self.mobile_number)],
+            msg=sms_message
+        )
+
+
+def normalize_ghana_number(self, number):
+    number = number.strip().replace(" ", "")
+    if number.startswith("+233"):
+        return number
+    if number.startswith("0"):
+        return "+233" + number[1:]
+    if number.startswith("233"):
+        return "+" + number
+    return number
 
 @frappe.whitelist()
 def approve_registration(registration_name):

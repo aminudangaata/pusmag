@@ -369,7 +369,7 @@
              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Card 1 -->
                 <div class="glass p-6 rounded-xl animate-on-scroll group hover:scale-[1.02] transition-transform">
-                     <h3 class="text-xl font-bold mb-3 text-primary-400">Socioreligious Development</h3>
+                     <h3 class="text-xl font-bold mb-3 text-yellow-400">Socioreligious Development</h3>
                      <p class="text-neutral-400 text-sm leading-relaxed">
                         Seeking the general welfare and development of Members and the wider Muslim community.
                      </p>
@@ -422,18 +422,18 @@
         <div class="container-custom">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                  <div class="glass p-8 rounded-xl text-center animate-on-scroll">
-                     <div class="w-16 h-16 mx-auto mb-6 bg-primary-500/20 rounded-full flex items-center justify-center shadow-lg shadow-primary-500/20">
-                        <svg class="w-8 h-8 stroke-primary-500" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                     <div class="w-16 h-16 mx-auto mb-6 bg-orange-500/20 rounded-full flex items-center justify-center shadow-lg shadow-orange-500/20">
+                        <svg class="w-8 h-8 stroke-orange-400" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
                      </div>
                      <h3 class="text-xl font-bold mb-2">General Assembly</h3>
-                     <p class="text-neutral-400 text-sm">The highest decision-making body of the association.</p>
+                     <p class="text-neutral-400 text-sm">The highest decision-making body of the Association.</p>
                  </div>
                  <div class="glass p-8 rounded-xl text-center animate-on-scroll" style="animation-delay: 0.1s">
-                      <div class="w-16 h-16 mx-auto mb-6 bg-accent-500/20 rounded-full flex items-center justify-center shadow-lg shadow-accent-500/20">
-                        <svg class="w-8 h-8 stroke-accent-500" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                      <div class="w-16 h-16 mx-auto mb-6 bg-green-500/20 rounded-full flex items-center justify-center shadow-lg shadow-green-500/20">
+                        <svg class="w-8 h-8 stroke-green-400" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
                       </div>
                      <h3 class="text-xl font-bold mb-2">Board of Directors</h3>
-                     <p class="text-neutral-400 text-sm">A body of eleven experienced Muslim Public Servants who provide oversight and general guidance.</p>
+                     <p class="text-neutral-400 text-sm">A body of 11 experienced Muslim Public Servants who provide oversight and general guidance.</p>
                  </div>
                  <div class="glass p-8 rounded-xl text-center animate-on-scroll" style="animation-delay: 0.2s">
                       <div class="w-16 h-16 mx-auto mb-6 bg-blue-500/20 rounded-full flex items-center justify-center shadow-lg shadow-blue-500/20">

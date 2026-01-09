@@ -16,7 +16,7 @@ export async function ObjectivesPage() {
              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Card 1 -->
                 <div class="glass p-6 rounded-xl animate-on-scroll group hover:scale-[1.02] transition-transform">
-                     <h3 class="text-xl font-bold mb-3 text-primary-400">Socioreligious Development</h3>
+                     <h3 class="text-xl font-bold mb-3 text-yellow-400">Socioreligious Development</h3>
                      <p class="text-neutral-400 text-sm leading-relaxed">
                         Seeking the general welfare and development of Members and the wider Muslim community.
                      </p>
