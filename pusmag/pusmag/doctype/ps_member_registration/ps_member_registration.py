@@ -4,7 +4,7 @@ from frappe.utils import random_string
 from frappe.core.doctype.sms_settings.sms_settings import send_sms
 
 class PSMemberRegistration(Document):
-    def on_update(self):
+    def before_save(self):
         if self.status == "Approved" and not self.verified:
             self.create_member_and_user()
             
@@ -52,7 +52,6 @@ class PSMemberRegistration(Document):
                 "region": self.region,
                 "skills": self.skills
             })
-            member.insert(ignore_permissions=True)
             
             # Copy professional memberships
             for row in self.professional_memberships:
@@ -61,11 +60,11 @@ class PSMemberRegistration(Document):
                     "professional_body": row.professional_body,
                     "membership_number": row.membership_number
                 })
-            member.save(ignore_permissions=True)
+            
+            member.insert(ignore_permissions=True)
 
         # 3. Mark as verified to avoid re-triggering
-        self.db_set("verified", 1)
-        frappe.db.commit()
+        self.verified = 1
     
     def after_insert(self):
         """
@@ -121,16 +120,15 @@ class PSMemberRegistration(Document):
             msg=sms_message
         )
 
-
-def normalize_ghana_number(self, number):
-    number = number.strip().replace(" ", "")
-    if number.startswith("+233"):
+    def normalize_ghana_number(self, number):
+        number = number.strip().replace(" ", "")
+        if number.startswith("+233"):
+            return number
+        if number.startswith("0"):
+            return "+233" + number[1:]
+        if number.startswith("233"):
+            return "+" + number
         return number
-    if number.startswith("0"):
-        return "+233" + number[1:]
-    if number.startswith("233"):
-        return "+" + number
-    return number
 
 @frappe.whitelist()
 def approve_registration(registration_name):
@@ -153,3 +151,23 @@ def reject_registration(registration_name, reason):
     doc.rejection_reason = reason
     doc.save(ignore_permissions=True)
     return {"status": "success"}
+
+@frappe.whitelist()
+def fix_missing_members():
+    if "PuSMAG Admin" not in frappe.get_roles():
+        frappe.throw("Not authorized", frappe.PermissionError)
+    
+    registrations = frappe.get_all("PS Member Registration", 
+        filters={"status": "Approved", "verified": 1},
+        fields=["name"]
+    )
+    
+    count = 0
+    for r in registrations:
+        doc = frappe.get_doc("PS Member Registration", r.name)
+        if not frappe.db.exists("PS Member", {"email_address": doc.email_address}):
+            doc.create_member_and_user()
+            doc.save(ignore_permissions=True)
+            count += 1
+            
+    return {"message": f"Fixed {count} missing members"}

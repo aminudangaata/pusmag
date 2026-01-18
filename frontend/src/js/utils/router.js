@@ -14,6 +14,8 @@ import { GalleryPage } from '../pages/Gallery.js'
 import { ContactPage } from '../pages/Contact.js'
 import { RegisterPage } from '../pages/Register.js'
 import { LoginPage } from '../pages/Login.js'
+import { ForgotPasswordPage } from '../pages/ForgotPassword.js'
+import { UpdatePasswordPage } from '../pages/UpdatePassword.js'
 import { PortalPage } from '../pages/Portal.js'
 import { Navbar } from '../components/Navbar.js'
 import { Footer } from '../components/Footer.js'
@@ -31,10 +33,12 @@ const routes = {
     '/ethics': EthicsPage,
     '/programmes': ProgrammesPage,
     '/programmes/:id': ProgrammeDetailsPage,
-    '/blog': BlogPage,
-    '/blog/:id': BlogPostPage,
+    '/blog-news': BlogPage,
+    '/blog-news/:id': BlogPostPage,
     '/gallery': GalleryPage,
     '/contact': ContactPage,
+    '/forgot-password': ForgotPasswordPage,
+    '/update-password': UpdatePasswordPage,
     '/register': RegisterPage,
     '/login': LoginPage,
     '/portal': PortalPage,
@@ -53,9 +57,15 @@ class Router {
     }
 
     async navigate(path) {
-        if (path === window.location.pathname) return
-        window.history.pushState({}, '', path)
-        this.currentPath = path
+        // Ensure path starts with BASE_PATH if it doesn't already, except for homepage
+        let fullPath = path
+        if (path !== '/' && BASE_PATH && !path.startsWith(BASE_PATH)) {
+            fullPath = `${BASE_PATH}${path}`
+        }
+
+        if (fullPath === window.location.pathname) return
+        window.history.pushState({}, '', fullPath)
+        this.currentPath = fullPath
         await this.handleRoute()
     }
 
@@ -80,7 +90,7 @@ class Router {
         this.currentPath = path
 
         // Ensure user is loaded before route guards
-        if (!this.user && !['/login', '/register', '/ps/login', '/ps/register'].includes(path)) {
+        if (!this.user && !['/login', '/register'].includes(path)) {
             try {
                 const { api } = await import('./api.js')
                 this.user = await api.getUserInfo()
@@ -103,10 +113,21 @@ class Router {
         }
 
         // Auth Check for Protected Routes
-        if (path.startsWith('/portal') && !this.user) {
-            console.log('Access denied. Redirecting to login.')
-            this.navigate('/login')
-            return
+        const isAuthenticated = !!(this.user && this.user.email);
+        const isPortalUser = isAuthenticated && Array.isArray(this.user.roles) &&
+            (this.user.roles.includes('PuSMAG Member') || this.user.roles.includes('PuSMAG Admin'));
+
+        if (path.startsWith('/portal')) {
+            if (!isAuthenticated) {
+                console.log('Access denied. Redirecting to login.')
+                this.navigate('/login')
+                return
+            }
+            if (!isPortalUser) {
+                console.log('Not authorized for portal. Redirecting home.')
+                this.navigate('/')
+                return
+            }
         }
 
         // Render page
@@ -191,10 +212,10 @@ class Router {
         links.forEach(link => {
             const href = link.getAttribute('href')
             if (href === currentPath) {
-                link.classList.add('text-white')
+                link.classList.add('text-neutral-300')
                 link.classList.remove('text-neutral-400')
             } else {
-                link.classList.remove('text-white')
+                link.classList.remove('text-neutral-300')
                 link.classList.add('text-neutral-400')
             }
         })
@@ -226,6 +247,20 @@ class Router {
           </div>
         `
     }
+    async logout() {
+        try {
+            const { api } = await import('./api.js')
+            await api.logout()
+        } catch (e) {
+            console.error('Logout error:', e)
+        } finally {
+            this.user = null
+            this.navigate('/login')
+        }
+    }
 }
 
 export const router = new Router()
+
+// Expose global logout handler
+window.handleLogout = () => router.logout()

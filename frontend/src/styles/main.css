@@ -1,6 +1,32 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 @import "tailwindcss";
+@config "../../tailwind.config.js";
+
+@theme {
+  --font-arabic: "Amiri", serif;
+  --color-primary-50: #ecfdf5;
+  --color-primary-100: #d1fae5;
+  --color-primary-200: #a7f3d0;
+  --color-primary-300: #6ee7b7;
+  --color-primary-400: #34d399;
+  --color-primary-500: #10b981;
+  --color-primary-600: #059669;
+  --color-primary-700: #047857;
+  --color-primary-800: #065f46;
+  --color-primary-900: #064e3b;
+
+  --color-accent-50: #f0f9ff;
+  --color-accent-100: #e0f2fe;
+  --color-accent-200: #bae6fd;
+  --color-accent-300: #7dd3fc;
+  --color-accent-400: #38bdf8;
+  --color-accent-500: #0ea5e9;
+  --color-accent-600: #0284c7;
+  --color-accent-700: #0369a1;
+  --color-accent-800: #075985;
+  --color-accent-900: #0c4a6e;
+}
 
 @layer base {
   html {
@@ -8,7 +34,7 @@
   }
 
   body {
-    @apply bg-black text-white font-sans antialiased text-base leading-relaxed;
+    @apply bg-neutral-900 text-neutral-300 font-sans antialiased text-base leading-relaxed;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 
@@ -27,7 +53,7 @@
   h4,
   h5,
   h6 {
-    @apply font-bold tracking-tight text-white;
+    @apply font-bold tracking-tight text-neutral-300;
   }
 
   h1 {
@@ -68,9 +94,16 @@
   box-shadow: 0 0 25px rgba(var(--primary-500), 0.3), 0 8px 40px rgba(var(--primary-500), 0.15);
 }
 
-.btn-custom:hover {
+.btn-custom:hover:not(:disabled) {
   transform: scale(1.05);
   box-shadow: 0 0 50px 10px rgba(var(--primary-500), 0.45);
+}
+
+.btn-custom:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: none;
 }
 
 .btn-custom::before {
@@ -88,6 +121,10 @@
       rgba(var(--primary-500), 0.8) 180deg,
       transparent 280deg,
       transparent 360deg);
+}
+
+.btn-custom:disabled::before {
+  display: none;
 }
 
 .btn-custom::after {
@@ -298,4 +335,45 @@
 
 .ql-snow .ql-active.ql-picker {
   color: rgb(var(--primary-500)) !important;
+}
+
+/* Select Dropdown Styles for Dark Mode */
+select {
+  background-color: #ffffff0d;
+  color: rgba(255, 255, 255, 0.87);
+  cursor: pointer;
+}
+
+select option {
+  background-color: #171717;
+  color: rgba(255, 255, 255, 0.87);
+  padding: 0.5rem 1rem;
+}
+
+select option:hover,
+select option:checked {
+  background-color: #171717;
+}
+
+select:focus {
+  outline: none;
+}
+
+/* Hide native password toggle in Edge/IE */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
+
+/* Hide native password toggle in Chrome/Webkit/Blink */
+input[type="password"]::-webkit-credentials-auto-fill-button {
+  visibility: hidden;
+  display: none !important;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+}
+
+.ql-editor.ql-blank::before {
+  color: gray;
 }

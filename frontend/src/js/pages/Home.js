@@ -102,8 +102,26 @@ export async function HomePage() {
                          style="transform: translateY(${index * 12}px) scale(${1 - index * 0.05}); z-index: ${30 - index * 10}; opacity: ${1 - index * 0.2};">
                       <div class="w-full h-full bg-gradient-to-br from-primary-500/20 to-accent-500/20 flex items-center justify-center">
                         <div class="text-center p-6">
-                          <div class="text-4xl font-bold text-white mb-2">${statistics[index]?.value || (index + 1) * 100}</div>
-                          <div class="text-sm text-white/60">${statistics[index]?.label || 'Metric'}</div>
+                          <div class="animate-on-scroll" style="animation-delay: 0.6s">
+                            <a href="/files/PuSMAG_Constitution.pdf" target="_blank" class="inline-flex items-center gap-4 group">
+                              <div class="relative">
+                                <!-- Pulsating attention grabber -->
+                                <div class="absolute -inset-2 bg-primary-500/20 rounded-full animate-ping opacity-75"></div>
+                                <div class="absolute -inset-1 bg-primary-500/10 rounded-full animate-pulse-slow"></div>
+                                
+                                <div class="relative w-12 h-12 rounded-full bg-neutral-900 border border-white/10 flex items-center justify-center group-hover:border-primary-500/50 transition-all duration-300">
+                                  <svg class="w-6 h-6 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                  </svg>
+                                </div>
+                              </div>
+                              <div class="flex flex-col">
+                                <span class="text-[10px] font-bold tracking-widest uppercase text-primary-500/60 group-hover:text-primary-500 transition-colors">Official Document</span>
+                                <span class="text-sm font-medium text-neutral-300 group-hover:text-primary-500 transition-colors">Read our Constitution</span>
+                              </div>
+                            </a>
+                          </div>
+
                         </div>
                       </div>
                     </div>

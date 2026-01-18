@@ -4,7 +4,7 @@ import { formatDate } from '../utils/helpers.js'
 
 // Helper to join paths correctly
 const getPath = (path) => {
-  if (path === '/') return BASE_PATH || '/'
+  if (path === '/') return '/'
   return `${BASE_PATH}${path}`
 }
 
@@ -58,6 +58,15 @@ window.handleImageError = (img) => {
   img.onerror = null;
   const parent = img.parentElement;
   parent.innerHTML = `<div class="w-full h-full bg-gradient-to-br from-primary-500/20 to-accent-500/20 group-hover:scale-110 transition-transform duration-700"></div>`;
+}
+
+window.toggleBlogFilters = () => {
+  const container = document.getElementById('blog-filters-container');
+  const arrow = document.getElementById('filter-toggle-arrow');
+  if (container) {
+    container.classList.toggle('hidden');
+    if (arrow) arrow.classList.toggle('rotate-180');
+  }
 }
 
 async function fetchAndRenderPosts() {
@@ -126,7 +135,7 @@ function renderPagination(hasPrev, hasNext) {
         <div class="flex justify-center items-center gap-4 mt-12">
             <button 
                 onclick="window.changeBlogPage(${currentFilters.page - 1})"
-                class="px-4 py-2 rounded-lg border border-white/10 text-sm font-medium transition-colors ${!hasPrev ? 'text-neutral-600 cursor-not-allowed' : 'text-neutral-300 hover:bg-white/5 hover:text-white'}"
+                class="px-4 py-2 rounded-lg border border-white/10 text-sm font-medium transition-colors ${!hasPrev ? 'text-neutral-600 cursor-not-allowed' : 'text-neutral-300 hover:bg-white/5 hover:text-neutral-300'}"
                 ${!hasPrev ? 'disabled' : ''}
             >
                 Previous
@@ -134,7 +143,7 @@ function renderPagination(hasPrev, hasNext) {
             <span class="text-neutral-400 text-sm">Page ${currentFilters.page}</span>
              <button 
                 onclick="window.changeBlogPage(${currentFilters.page + 1})"
-                class="px-4 py-2 rounded-lg border border-white/10 text-sm font-medium transition-colors ${!hasNext ? 'text-neutral-600 cursor-not-allowed' : 'text-neutral-300 hover:bg-white/5 hover:text-white'}"
+                class="px-4 py-2 rounded-lg border border-white/10 text-sm font-medium transition-colors ${!hasNext ? 'text-neutral-600 cursor-not-allowed' : 'text-neutral-300 hover:bg-white/5 hover:text-neutral-300'}"
                 ${!hasNext ? 'disabled' : ''}
             >
                 Next
@@ -146,7 +155,7 @@ function renderPagination(hasPrev, hasNext) {
 function renderPostCard(post, index) {
   return `
     <article class="glass rounded-xl overflow-hidden group hover-lift hover-glow animate-on-scroll flex flex-col h-full" style="animation-delay: ${index * 0.1}s">
-        <a href="${getPath(`/blog/${post.id || index}`)}" class="block h-48 overflow-hidden relative shrink-0">
+        <a href="${getPath(`/blog-news/${post.id || index}`)}" class="block h-48 overflow-hidden relative shrink-0">
             ${post.image
       ? `<img src="${post.image}" alt="${post.title}" onerror="window.handleImageError(this)" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">`
       : `<div class="w-full h-full bg-gradient-to-br from-primary-500/20 to-accent-500/20 group-hover:scale-110 transition-transform duration-700"></div>`
@@ -160,10 +169,10 @@ function renderPostCard(post, index) {
                 <span class="text-xs text-neutral-500">${formatDate(post.date) || 'Recent'}</span>
             </div>
             <h2 class="text-lg font-bold mb-2 leading-tight hover:text-primary-500 transition-colors">
-                <a href="${getPath(`/blog/${post.id || index}`)}">${post.title}</a>
+                <a href="${getPath(`/blog-news/${post.id || index}`)}">${post.title}</a>
             </h2>
             <p class="text-neutral-400 text-sm mb-4 line-clamp-3 leading-snug flex-grow">${post.excerpt || ''}</p>
-            <a href="${getPath(`/blog/${post.id || index}`)}" class="text-primary-500 text-xs font-bold uppercase tracking-widest hover:underline inline-flex items-center gap-1 group-hover:gap-2 transition-all mt-auto">
+            <a href="${getPath(`/blog-news/${post.id || index}`)}" class="text-primary-500 text-xs font-bold uppercase tracking-widest hover:underline inline-flex items-center gap-1 group-hover:gap-2 transition-all mt-auto">
                 Read more <span class="transition-transform group-hover:translate-x-1">→</span>
             </a>
         </div>
@@ -222,57 +231,76 @@ export async function BlogPage() {
         <div class="container-custom">
           <div class="grid grid-cols-1 lg:grid-cols-4 gap-12">
             
-            <!-- Sidebar -->
-            <aside class="lg:col-span-1 space-y-8 h-fit animate-on-scroll sticky top-32">
-                <!-- Search -->
-                <div class="glass p-6 rounded-xl">
-                    <h3 class="text-base font-bold mb-4 uppercase tracking-widest text-neutral-400">Search</h3>
-                    <div class="relative">
-                        <input 
-                            type="text" 
-                            id="blog-search"
-                            oninput="window.handlePublicBlogSearch(this.value)"
-                            placeholder="Search articles..." 
-                            class="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-2.5 text-sm text-white placeholder-neutral-500 focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all"
-                        >
-                        <svg class="w-4 h-4 text-neutral-500 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            <!-- Sidebar / Filters -->
+            <aside class="lg:col-span-1 h-fit sticky top-[80px] lg:top-28 z-30">
+                <!-- Mobile Filter Toggle -->
+                <button 
+                    onclick="window.toggleBlogFilters()"
+                    class="lg:hidden w-full glass mb-4 px-5 py-3.5 rounded-xl flex items-center justify-between text-neutral-300 font-bold uppercase tracking-widest border border-white/10 shadow-lg shadow-black/20"
+                >
+                    <span class="flex items-center gap-2 text-sm">
+                        <svg class="w-4 h-4 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
                         </svg>
-                    </div>
-                </div>
+                        Search & Filters
+                    </span>
+                    <svg id="filter-toggle-arrow" class="w-4 h-4 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
 
-                <!-- Categories -->
-                <div class="glass p-6 rounded-xl">
-                    <h3 class="text-base font-bold mb-4 uppercase tracking-widest text-neutral-400">Categories</h3>
-                    <ul class="space-y-1">
-                        <li>
-                             <button 
-                                onclick="window.filterBlogCategory('', null)"
-                                class="blog-category-link w-full text-left text-sm py-2 px-3 rounded-md hover:bg-white/5 hover:text-primary-500 transition-colors text-primary-500 font-bold cursor-pointer"
+                <!-- Filters Container (Hidden on mobile unless toggled) -->
+                <div id="blog-filters-container" class="hidden lg:block space-y-6 max-h-[70vh] overflow-y-auto lg:max-h-none pr-2 lg:pr-0">
+                    <!-- Search -->
+                    <div class="glass p-5 rounded-xl border border-white/5 shadow-xl shadow-black/20">
+                        <h3 class="text-[10px] font-bold mb-4 uppercase tracking-widest text-neutral-500">Search Articles</h3>
+                        <div class="relative">
+                            <input 
+                                type="text" 
+                                id="blog-search"
+                                oninput="window.handlePublicBlogSearch(this.value)"
+                                placeholder="Type to search..." 
+                                class="w-full bg-neutral-900/50 border border-white/10 rounded-lg px-4 py-2 text-sm text-neutral-300 placeholder-neutral-600 focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all"
                             >
-                                All Categories
-                            </button>
-                        </li>
-                        ${categories.map(cat => `
+                            <svg class="w-4 h-4 text-neutral-500 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Categories -->
+                    <div class="glass p-5 rounded-xl border border-white/5 shadow-xl shadow-black/20">
+                        <h3 class="text-[10px] font-bold mb-4 uppercase tracking-widest text-neutral-500">Categories</h3>
+                        <ul class="space-y-1">
                             <li>
                                 <button 
-                                    onclick="window.filterBlogCategory('${cat}', this)"
-                                    class="blog-category-link w-full text-left text-sm py-2 px-3 rounded-md text-neutral-400 hover:bg-white/5 hover:text-primary-500 transition-colors cursor-pointer"
+                                    onclick="window.filterBlogCategory('', null)"
+                                    class="blog-category-link w-full text-left text-sm py-2 px-3 rounded-lg hover:bg-white/5 hover:text-primary-500 transition-all text-primary-500 font-bold cursor-pointer"
                                 >
-                                    ${cat}
+                                    All Articles
                                 </button>
                             </li>
-                        `).join('')}
-                    </ul>
+                            ${categories.map(cat => `
+                                <li>
+                                    <button 
+                                        onclick="window.filterBlogCategory('${cat}', this)"
+                                        class="blog-category-link w-full text-left text-sm py-2 px-3 rounded-lg text-neutral-400 hover:bg-white/5 hover:text-primary-500 transition-all cursor-pointer"
+                                    >
+                                        ${cat}
+                                    </button>
+                                </li>
+                            `).join('')}
+                        </ul>
+                    </div>
                 </div>
             </aside>
 
             <!-- Blog Grid -->
             <div class="lg:col-span-3">
-                <div id="blog-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div id="blog-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">
                     ${posts.length > 0 ? posts.map((post, index) => renderPostCard(post, index)).join('') : `
-                        <div class="col-span-full text-center py-20">
-                            <p class="text-xl text-neutral-400">No posts found</p>
+                        <div class="col-span-full text-center py-20 glass rounded-xl">
+                            <p class="text-xl text-neutral-400">No matching articles found</p>
                         </div>
                     `}
                 </div>
@@ -289,7 +317,7 @@ export async function BlogPage() {
                         <span class="text-neutral-400 text-sm">Page 1</span>
                          <button 
                             onclick="window.changeBlogPage(2)"
-                            class="px-4 py-2 rounded-lg border border-white/10 text-sm font-medium transition-colors ${!hasNext ? 'text-neutral-600 cursor-not-allowed' : 'text-neutral-300 hover:bg-white/5 hover:text-white'}"
+                            class="px-4 py-2 rounded-lg border border-white/10 text-sm font-medium transition-colors ${!hasNext ? 'text-neutral-600 cursor-not-allowed' : 'text-neutral-300 hover:bg-white/5 hover:text-neutral-300'}"
                             ${!hasNext ? 'disabled' : ''}
                         >
                             Next

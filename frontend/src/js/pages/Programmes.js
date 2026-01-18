@@ -5,7 +5,7 @@ import { formatDate } from '../utils/helpers.js'
 export async function ProgrammesPage() {
   // Helper to join paths correctly
   const getPath = (path) => {
-    if (path === '/') return BASE_PATH || '/'
+    if (path === '/') return '/'
     return `${BASE_PATH}${path}`
   }
 
@@ -63,7 +63,7 @@ export async function ProgrammesPage() {
                         </svg>
                         <span>${formatDate(event.date) || 'TBA'}</span>
                     </div>
-                    <a href="${getPath(`/programmes/${event.id || event.route}`)}" class="text-xs font-medium text-white bg-white/10 px-3 py-1 rounded-full hover:bg-primary-500 hover:text-black transition-all">
+                    <a href="${getPath(`/programmes/${event.id || event.route}`)}" class="text-xs font-medium text-neutral-300 bg-white/10 px-3 py-1 rounded-full hover:bg-primary-500 hover:text-neutral-900 transition-all">
                         Details
                     </a>
                   </div>

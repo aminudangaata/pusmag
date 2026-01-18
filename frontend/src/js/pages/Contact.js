@@ -22,15 +22,15 @@ export async function ContactPage() {
               <form id="contact-form" class="space-y-6">
                 <div>
                   <label class="block text-sm font-medium mb-2">Name</label>
-                  <input type="text" name="name" required class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-primary-500 transition-colors">
+                  <input type="text" name="name" required class="text-sm w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-primary-500 transition-colors">
                 </div>
                 <div>
                   <label class="block text-sm font-medium mb-2">Email</label>
-                  <input type="email" name="email" required class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-primary-500 transition-colors">
+                  <input type="email" name="email" required class="text-sm w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-primary-500 transition-colors">
                 </div>
                 <div>
                   <label class="block text-sm font-medium mb-2">Message</label>
-                  <textarea name="message" required rows="5" class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-primary-500 transition-colors"></textarea>
+                  <textarea name="message" required rows="6" class="text-sm w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-primary-500 transition-colors"></textarea>
                 </div>
                 <button type="submit" class="btn-custom w-full">
                   <span class="inner">Send Message</span>
@@ -41,7 +41,7 @@ export async function ContactPage() {
 
             <!-- Contact Info -->
             <div class="space-y-8 animate-on-scroll" style="animation-delay: 0.1s">
-              <div class="glass rounded-xl p-6">
+              <div class="glass rounded-xl p-4">
                 <div class="flex items-start gap-4">
                   <div class="w-12 h-12 rounded-full bg-primary-500/20 flex items-center justify-center flex-shrink-0">
                     <svg class="w-6 h-6 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -49,13 +49,13 @@ export async function ContactPage() {
                     </svg>
                   </div>
                   <div>
-                    <h3 class="font-semibold mb-1">Phone</h3>
-                    <p class="text-neutral-400">+(233) 50 175 6250</p>
+                    <h3 class="text-lg font-semibold mb-1">Phone</h3>
+                    <p class="text-sm text-neutral-400">+(233) 50 175 6250</p>
                   </div>
                 </div>
               </div>
 
-              <div class="glass rounded-xl p-6">
+              <div class="glass rounded-xl p-4">
                 <div class="flex items-start gap-4">
                   <div class="w-12 h-12 rounded-full bg-primary-500/20 flex items-center justify-center flex-shrink-0">
                     <svg class="w-6 h-6 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -63,13 +63,13 @@ export async function ContactPage() {
                     </svg>
                   </div>
                   <div>
-                    <h3 class="font-semibold mb-1">Email</h3>
-                    <p class="text-neutral-400">info@pusmag.org</p>
+                    <h3 class="text-lg font-semibold mb-1">Email</h3>
+                    <p class="text-sm text-neutral-400">info@pusmag.org</p>
                   </div>
                 </div>
               </div>
 
-              <div class="glass rounded-xl p-6">
+              <div class="glass rounded-xl p-4">
                 <div class="flex items-start gap-4">
                   <div class="w-12 h-12 rounded-full bg-primary-500/20 flex items-center justify-center flex-shrink-0">
                     <svg class="w-6 h-6 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -77,8 +77,8 @@ export async function ContactPage() {
                     </svg>
                   </div>
                   <div>
-                    <h3 class="font-semibold mb-1">Office Hours</h3>
-                    <p class="text-neutral-400">Monday - Friday: 8am-5pm</p>
+                    <h3 class="text-lg font-semibold mb-1">Office Hours</h3>
+                    <p class="text-sm text-neutral-400">Monday - Friday: 8am-5pm</p>
                   </div>
                 </div>
               </div>

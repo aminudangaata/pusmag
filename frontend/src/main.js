@@ -32,7 +32,7 @@ try {
     // Handle navigation clicks
     document.addEventListener('click', (e) => {
       const link = e.target.closest('a[href^="/"]')
-      if (link) {
+      if (link && !link.getAttribute('href').startsWith('/files/') && link.getAttribute('target') !== '_blank') {
         e.preventDefault()
         const path = link.getAttribute('href')
         router.navigate(path)
@@ -42,6 +42,17 @@ try {
     // Handle browser back/forward
     window.addEventListener('popstate', async () => {
       await router.handleRoute()
+    })
+
+    // Mobile menu toggle
+    document.addEventListener('click', (e) => {
+      const mobileMenuBtn = e.target.closest('#mobile-menu-btn')
+      if (mobileMenuBtn) {
+        const menu = document.getElementById('mobile-menu')
+        if (menu) {
+          menu.classList.toggle('hidden')
+        }
+      }
     })
   })
 } catch (error) {

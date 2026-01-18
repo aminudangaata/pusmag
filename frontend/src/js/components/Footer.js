@@ -2,7 +2,7 @@ import { BASE_PATH } from '../utils/constants.js'
 
 export function Footer() {
   const getPath = (path) => {
-    if (path === '/') return BASE_PATH || '/'
+    if (path === '/') return '/'
     return `${BASE_PATH}${path}`
   }
 
@@ -44,10 +44,10 @@ export function Footer() {
           <div>
             <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
             <ul class="space-y-2">
-              <li><a href="${getPath('/about')}" class="text-neutral-400 hover:text-white transition-colors text-sm">About Us</a></li>
-              <li><a href="${getPath('/programmes')}" class="text-neutral-400 hover:text-white transition-colors text-sm">Programmes</a></li>
-              <li><a href="${getPath('/blog')}" class="text-neutral-400 hover:text-white transition-colors text-sm">Blog</a></li>
-              <li><a href="${getPath('/gallery')}" class="text-neutral-400 hover:text-white transition-colors text-sm">Gallery</a></li>
+              <li><a href="${getPath('/about')}" class="text-neutral-400 hover:text-neutral-300 transition-colors text-sm">About Us</a></li>
+              <li><a href="${getPath('/programmes')}" class="text-neutral-400 hover:text-neutral-300 transition-colors text-sm">Programmes</a></li>
+              <li><a href="${getPath('/blog-news')}" class="text-neutral-400 hover:text-neutral-300 transition-colors text-sm">Blog</a></li>
+              <li><a href="${getPath('/gallery')}" class="text-neutral-400 hover:text-neutral-300 transition-colors text-sm">Gallery</a></li>
             </ul>
           </div>
 
@@ -55,9 +55,9 @@ export function Footer() {
           <div>
             <h3 class="text-lg font-semibold mb-4">Membership</h3>
             <ul class="space-y-2">
-              <li><a href="${getPath('/register')}" class="text-neutral-400 hover:text-white transition-colors text-sm">Become a Member</a></li>
-              <li><a href="#" class="text-neutral-400 hover:text-white transition-colors text-sm">Benefits</a></li>
-              <li><a href="#" class="text-neutral-400 hover:text-white transition-colors text-sm">Pay Dues</a></li>
+              <li><a href="${getPath('/register')}" class="text-neutral-400 hover:text-neutral-300 transition-colors text-sm">Become a Member</a></li>
+              <li><a href="#" class="text-neutral-400 hover:text-neutral-300 transition-colors text-sm">Benefits</a></li>
+              <li><a href="#" class="text-neutral-400 hover:text-neutral-300 transition-colors text-sm">Pay Dues</a></li>
             </ul>
           </div>
 
@@ -93,8 +93,8 @@ export function Footer() {
             © ${new Date().getFullYear()} Public Services Muslims Association of Ghana. All Rights Reserved.
           </p>
           <div class="flex gap-6 text-sm text-neutral-400">
-            <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
-            <a href="#" class="hover:text-white transition-colors">Terms of Use</a>
+            <a href="#" class="hover:text-neutral-300 transition-colors">Privacy Policy</a>
+            <a href="#" class="hover:text-neutral-300 transition-colors">Terms of Use</a>
           </div>
         </div>
       </div>

@@ -96,7 +96,7 @@ window.handle2FASubmit = async (event) => {
 
         // Success! Get user info and redirect
         router.user = await api.getUserInfo();
-        router.navigate('/ps/portal');
+        router.navigate('/portal');
 
     } catch (error) {
         messageEl.textContent = error.message || "Invalid code. Please try again.";
@@ -104,6 +104,22 @@ window.handle2FASubmit = async (event) => {
         messageEl.classList.remove('hidden');
         submitBtn.disabled = false;
         submitBtn.innerHTML = '<span class="inner">Verify Code</span>';
+    }
+}
+
+window.togglePassword = () => {
+    const pwdInput = document.querySelector('input[name="pwd"]');
+    const eyeIcon = document.getElementById('eye-icon');
+    const eyeOffIcon = document.getElementById('eye-off-icon');
+
+    if (pwdInput.type === 'password') {
+        pwdInput.type = 'text';
+        eyeIcon.classList.add('hidden');
+        eyeOffIcon.classList.remove('hidden');
+    } else {
+        pwdInput.type = 'password';
+        eyeIcon.classList.remove('hidden');
+        eyeOffIcon.classList.add('hidden');
     }
 }
 
@@ -123,13 +139,24 @@ export async function LoginPage() {
                     <form onsubmit="window.handleLoginSubmit(event)" class="space-y-6">
                         <div>
                             <label class="block text-sm font-medium mb-2">Email Address</label>
-                            <input type="email" name="usr" required placeholder="name@email.com" 
-                                class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-primary-500 transition-all">
+                            <input type="text" name="usr" required placeholder="name@email.com" 
+                                class="w-full text-sm px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-primary-500 transition-all">
                         </div>
                         <div>
                             <label class="block text-sm font-medium mb-2">Password</label>
-                            <input type="password" name="pwd" required placeholder="••••••••" 
-                                class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-primary-500 transition-all">
+                            <div class="relative">
+                                <input type="password" name="pwd" required placeholder="••••••••" 
+                                    class="w-full text-sm px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-primary-500 transition-all">
+                                <button type="button" onclick="window.togglePassword()" class="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-200 hover:text-primary-500 transition-all p-1">
+                                    <svg id="eye-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                    </svg>
+                                    <svg id="eye-off-icon" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18" />
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                         <button type="submit" class="btn-custom w-full">
                             <span class="inner">Sign In</span>
@@ -137,8 +164,7 @@ export async function LoginPage() {
                     </form>
 
                     <p class="mt-8 text-center text-sm text-neutral-500">
-                        Don't have an account? 
-                        <a href="/ps/register" class="text-primary-500 hover:text-primary-400 font-medium">Register here</a>
+                        <a href="/forgot-password" class="text-primary-500 hover:text-primary-400 font-medium">Forgot Password?</a>
                     </p>
                 </div>
 
@@ -151,7 +177,7 @@ export async function LoginPage() {
                             </svg>
                         </div>
                         <h1 class="text-3xl font-bold mb-2">Verification</h1>
-                        <p class="text-neutral-400">Enter the 6-digit code sent to <br><span id="2fa-email-display" class="text-white font-medium"></span></p>
+                        <p class="text-neutral-400">Enter the 6-digit code sent to <br><span id="2fa-email-display" class="text-neutral-300 font-medium"></span></p>
                     </div>
 
                     <div id="2fa-message" class="hidden"></div>

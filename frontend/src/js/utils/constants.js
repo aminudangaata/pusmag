@@ -1,1 +1,1 @@
-export const BASE_PATH = '/ps'
+export const BASE_PATH = ''

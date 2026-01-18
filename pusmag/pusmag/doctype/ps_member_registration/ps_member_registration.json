@@ -56,6 +56,7 @@
   {
    "fieldname": "first_name",
    "fieldtype": "Data",
+   "in_standard_filter": 1,
    "label": "First Name",
    "reqd": 1
   },
@@ -67,6 +68,7 @@
   {
    "fieldname": "surname",
    "fieldtype": "Data",
+   "in_standard_filter": 1,
    "label": "Surname",
    "reqd": 1
   },
@@ -251,7 +253,7 @@
  "image_field": "photo",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-01-07 15:28:03.701940",
+ "modified": "2026-01-10 12:18:33.730030",
  "modified_by": "Administrator",
  "module": "PuSMAG",
  "name": "PS Member Registration",
@@ -271,6 +273,8 @@
    "write": 1
   }
  ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],

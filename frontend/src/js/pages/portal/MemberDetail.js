@@ -36,8 +36,8 @@ export async function MemberDetail(params) {
                                  alt="${member.first_name}" 
                                  class="w-full h-full object-cover">
                         </div>
-                        <h3 class="text-2xl font-bold mb-1">${member.title || ''} ${member.first_name} ${member.middle_name || ''} ${member.surname}</h3>
-                        <p class="text-primary-500 font-semibold uppercase tracking-widest text-sm mb-4">${member.designation || 'Member'}</p>
+                        <h3 class="text-2xl font-bold mb-3">${member.title || ''} ${member.first_name} ${member.middle_name || ''} ${member.surname}</h3>
+                        <p class="text-primary-500 font-semibold uppercase tracking-widest leading-tight text-sm mb-4">${member.designation || 'Member'}</p>
                         
                         <div class="flex gap-3">
                             <a href="mailto:${member.email_address}" class="p-3 glass rounded-xl hover:text-primary-500 transition-colors" title="${member.email_address}">
@@ -80,15 +80,15 @@ export async function MemberDetail(params) {
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                              <div class="space-y-1">
                                 <span class="text-xs text-neutral-500 uppercase tracking-wider font-bold">Institution</span>
-                                <p class="text-white font-medium">${member.institution || 'N/A'}</p>
+                                <p class="text-neutral-300 font-medium">${member.institution || 'N/A'}</p>
                             </div>
                             <div class="space-y-1">
                                 <span class="text-xs text-neutral-500 uppercase tracking-wider font-bold">Designation</span>
-                                <p class="text-white font-medium">${member.designation || 'N/A'}</p>
+                                <p class="text-neutral-300 font-medium">${member.designation || 'N/A'}</p>
                             </div>
                             <div class="space-y-1">
                                 <span class="text-xs text-neutral-500 uppercase tracking-wider font-bold">Region</span>
-                                <p class="text-white font-medium">${member.region || 'N/A'}</p>
+                                <p class="text-neutral-300 font-medium">${member.region || 'N/A'}</p>
                             </div>
                         </div>
 

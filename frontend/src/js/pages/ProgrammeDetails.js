@@ -29,17 +29,17 @@ export async function ProgrammeDetailsPage(params) {
             ${programme.image ?
             `<div class="absolute inset-0">
                     <img src="${programme.image}" alt="${programme.title}" class="w-full h-full object-cover">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-neutral-900 via-neutral-900/50 to-transparent"></div>
                 </div>` :
             `<div class="absolute inset-0 bg-gradient-to-br from-primary-500/20 to-accent-500/20"></div>`
         }
             
             <div class="container-custom relative z-10">
                 <div class="max-w-4xl">
-                    <div class="inline-block px-3 py-1 rounded-full bg-primary-500 text-black text-xs font-bold uppercase tracking-wider mb-4 animate-on-scroll">
+                    <div class="inline-block px-3 py-1 rounded-full bg-primary-500 text-neutral-900 text-xs font-bold uppercase tracking-wider mb-4 animate-on-scroll">
                         ${programme.category}
                     </div>
-                    <h1 class="text-4xl md:text-6xl font-bold text-white mb-6 animate-on-scroll" style="animation-delay: 0.1s">
+                    <h1 class="text-4xl md:text-6xl font-bold text-neutral-300 mb-6 animate-on-scroll" style="animation-delay: 0.1s">
                         ${programme.title}
                     </h1>
                     <div class="flex flex-wrap gap-6 text-neutral-300 animate-on-scroll" style="animation-delay: 0.2s">
@@ -80,7 +80,7 @@ export async function ProgrammeDetailsPage(params) {
                             <h3 class="text-xl font-bold mb-6">Info</h3>
                             <div class="space-y-4 text-neutral-400">
                                 <p>Interested in this programme? Contact us for more details.</p>
-                                <a href="/ps/contact" class="btn-custom w-full text-center block">
+                                <a href="/contact" class="btn-custom w-full text-center block">
                                     <span class="inner">Contact Us</span>
                                 </a>
                             </div>

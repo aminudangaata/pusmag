@@ -24,11 +24,11 @@ export async function GalleryPage() {
 
   const renderFilters = () => `
         <div class="flex flex-wrap justify-center gap-4 mb-12 animate-on-scroll">
-            <button class="filter-btn active px-6 py-2 rounded-full border border-white/10 bg-white/10 text-white transition-all hover:bg-white/20" data-filter="all">
+            <button class="filter-btn active px-6 py-2 rounded-full border border-white/10 bg-white/10 text-neutral-300 transition-all hover:bg-white/20" data-filter="all">
                 All
             </button>
             ${categories.map(cat => `
-                <button class="filter-btn px-6 py-2 rounded-full border border-white/10 text-neutral-400 hover:text-white transition-all hover:bg-white/10" data-filter="${cat}">
+                <button class="filter-btn px-6 py-2 rounded-full border border-white/10 text-neutral-400 hover:text-neutral-300 transition-all hover:bg-white/10" data-filter="${cat}">
                     ${cat}
                 </button>
             `).join('')}
@@ -64,9 +64,9 @@ export async function GalleryPage() {
                        </svg>
                      </div>`
     }
-                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                <div class="absolute inset-0 bg-gradient-to-t from-neutral-900/80 via-transparent to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
                     <span class="text-xs font-bold text-primary-500 uppercase tracking-widest mb-2">${image.category || 'General'}</span>
-                    <h3 class="text-lg font-bold text-white">${image.title}</h3>
+                    <h3 class="text-lg font-bold text-neutral-300">${image.title}</h3>
                 </div>
               </div>
             `).join('')}
@@ -76,19 +76,19 @@ export async function GalleryPage() {
     </div>
 
     <!-- Lightbox Modal -->
-    <div id="gallery-lightbox" class="fixed inset-0 z-[100] hidden bg-black/95 backdrop-blur-sm flex flex-col items-center justify-center p-4">
-        <button onclick="window.closeGalleryLightbox()" class="absolute top-6 right-6 text-white/50 hover:text-white transition-colors z-50">
+    <div id="gallery-lightbox" class="fixed inset-0 z-[100] hidden bg-neutral-900/95 backdrop-blur-sm flex flex-col items-center justify-center p-4">
+        <button onclick="window.closeGalleryLightbox()" class="absolute top-6 right-6 text-neutral-300/50 hover:text-neutral-300 transition-colors z-50">
             <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
             </svg>
         </button>
 
-        <button onclick="window.prevGalleryImage()" class="absolute left-4 top-1/2 -translate-y-1/2 text-white/50 hover:text-white transition-colors">
+        <button onclick="window.prevGalleryImage()" class="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-300/50 hover:text-neutral-300 transition-colors">
             <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
             </svg>
         </button>
-        <button onclick="window.nextGalleryImage()" class="absolute right-4 top-1/2 -translate-y-1/2 text-white/50 hover:text-white transition-colors">
+        <button onclick="window.nextGalleryImage()" class="absolute right-4 top-1/2 -translate-y-1/2 text-neutral-300/50 hover:text-neutral-300 transition-colors">
             <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
             </svg>
@@ -99,7 +99,7 @@ export async function GalleryPage() {
             
             <div class="mt-8 text-center pointer-events-auto">
                 <span id="lightbox-category" class="inline-block text-xs font-bold text-primary-500 uppercase tracking-widest mb-2 border border-primary-500/30 px-3 py-1 rounded-full"></span>
-                <h3 id="lightbox-title" class="text-2xl md:text-3xl font-bold text-white mb-2"></h3>
+                <h3 id="lightbox-title" class="text-2xl md:text-3xl font-bold text-neutral-300 mb-2"></h3>
                 <p id="lightbox-counter" class="text-neutral-500 text-sm"></p>
             </div>
         </div>
@@ -213,10 +213,10 @@ export async function GalleryPage() {
     buttons.forEach(btn => {
       btn.addEventListener('click', () => {
         buttons.forEach(b => {
-          b.classList.remove('active', 'bg-white/10', 'text-white')
+          b.classList.remove('active', 'bg-white/10', 'text-neutral-300')
           b.classList.add('text-neutral-400')
         })
-        btn.classList.add('active', 'bg-white/10', 'text-white')
+        btn.classList.add('active', 'bg-white/10', 'text-neutral-300')
         btn.classList.remove('text-neutral-400')
 
         const filter = btn.dataset.filter

@@ -18,9 +18,17 @@ app_include_css = "/assets/pusmag/pusmag/css/app.css"
 # web_include_js = "/assets/pusmag/js/pusmag.js"
 
 website_route_rules = [
-    # {'from_route': '/login', 'to_route': 'ps', 'defaults': {'app_path': 'login'}},
+    {'from_route': '/login', 'to_route': 'index'},
+    {'from_route': '/register', 'to_route': 'index'},
+    {'from_route': '/update-password', 'to_route': 'index'},
+    {'from_route': '/portal/<path:path>', 'to_route': 'index'},
+    {'from_route': '/about', 'to_route': 'index'},
+    {'from_route': '/blog-news', 'to_route': 'index'},
+    {'from_route': '/contact', 'to_route': 'index'},
+    {'from_route': '/gallery', 'to_route': 'index'},
+    {'from_route': '/blog/<path:path>', 'to_route': 'index'},
+    {'from_route': '/programmes/<path:path>', 'to_route': 'index'},
     {'from_route': '/pusmag_post/<docname>', 'to_route': 'pusmag_post'},
-    {'from_route': '/ps/<path:app_path>', 'to_route': 'ps'},
 ]
 
 fixtures = [
@@ -51,7 +59,10 @@ fixtures = [
 # ----------
 
 # application home page (will override Website Settings)
-# home_page = "login"
+home_page = "index"
+
+login_redirect_url = "/portal"
+logout_redirect_url = "/"
 
 # website user home page (by Role)
 # role_home_page = {

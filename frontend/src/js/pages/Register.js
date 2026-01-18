@@ -1,4 +1,5 @@
 import { api } from '../utils/api.js'
+import { Modal } from '../components/Modal.js'
 
 // Expose functions to window for onclick handlers
 window.addMembershipRow = () => {
@@ -9,13 +10,13 @@ window.addMembershipRow = () => {
   row.className = 'membership-row grid grid-cols-12 gap-2 p-2 border-t border-white/5';
   row.innerHTML = `
         <div class="col-span-4">
-            <input type="text" placeholder="e.g. Accountant" class="w-full px-3 py-2 bg-black/20 border border-white/10 rounded focus:outline-none focus:border-primary-500 text-sm">
+            <input type="text" placeholder="e.g. Accountant" class="w-full px-3 py-2 bg-neutral-900/20 border border-white/10 rounded focus:outline-none focus:border-primary-500 text-sm">
         </div>
         <div class="col-span-4">
-            <input type="text" placeholder="e.g. ICA Ghana" class="w-full px-3 py-2 bg-black/20 border border-white/10 rounded focus:outline-none focus:border-primary-500 text-sm">
+            <input type="text" placeholder="e.g. ICA Ghana" class="w-full px-3 py-2 bg-neutral-900/20 border border-white/10 rounded focus:outline-none focus:border-primary-500 text-sm">
         </div>
         <div class="col-span-3">
-            <input type="text" placeholder="Num" class="w-full px-3 py-2 bg-black/20 border border-white/10 rounded focus:outline-none focus:border-primary-500 text-sm">
+            <input type="text" placeholder="Num" class="w-full px-3 py-2 bg-neutral-900/20 border border-white/10 rounded focus:outline-none focus:border-primary-500 text-sm">
         </div>
         <div class="col-span-1 flex justify-center items-center">
             <button type="button" onclick="this.closest('.membership-row').remove()" class="text-red-500 hover:text-red-400 p-1">
@@ -131,9 +132,7 @@ window.handleRegistrationSubmit = async (event) => {
     // 2. Size validation (2MB)
     const maxSize = 2 * 1024 * 1024;
     if (file.size > maxSize) {
-      formMessage.textContent = 'File size is too large. Maximum size allowed is 2MB.';
-      formMessage.className = 'text-center p-4 rounded-lg bg-red-500/10 border border-red-500/20 text-red-500 mb-6';
-      formMessage.classList.remove('hidden');
+      Modal.alert('File too large', 'File size is too large. Maximum size allowed is 2MB.');
       btn.innerHTML = originalText;
       btn.disabled = false;
       return;
@@ -203,9 +202,9 @@ export async function RegisterPage() {
       <!-- Page Header -->
       <section class="section-padding bg-gradient-to-br from-primary-500/10 to-accent-500/10">
         <div class="container-custom text-center">
-          <h1 class="text-5xl md:text-6xl font-bold mb-6 animate-on-scroll">Become a Member</h1>
-          <p class="text-xl text-neutral-400 max-w-3xl mx-auto animate-on-scroll" style="animation-delay: 0.1s">
-            Join the Public Services Muslims Association of Ghana today
+          <h1 class="text-4xl md:text-5xl font-bold mb-6 animate-on-scroll">Become a Member</h1>
+          <p class="text-lg text-neutral-400 max-w-3xl mx-auto animate-on-scroll" style="animation-delay: 0.1s">
+            Your membership with PuSMAG begins here. Kindly take a few moment to complete the registration form below, ensuring that all details are accurate and up-to-date.
           </p>
         </div>
       </section>
@@ -217,23 +216,7 @@ export async function RegisterPage() {
           
           <form id="registration-form" onsubmit="window.handleRegistrationSubmit(event)" novalidate class="glass rounded-xl p-8 space-y-8 animate-on-scroll">
             
-            <style>
-              /* Theme aligned select elements */
-              select {
-                background-color: rgba(0, 0, 0, 0.4);
-                color: white;
-                appearance: none;
-                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='white'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
-                background-repeat: no-repeat;
-                background-position: right 1rem center;
-                background-size: 1.25rem;
-              }
-              
-              select option {
-                background-color: #1a1a1a;
-                color: white;
-              }
-            </style>
+            
 
             <!-- Personal Details -->
             <div>
@@ -241,7 +224,7 @@ export async function RegisterPage() {
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div>
                     <label class="block text-sm font-medium mb-2">Title *</label>
-                    <select name="title" required onblur="window.validateField(this)" class="w-full px-4 py-3 border border-white/10 rounded-lg focus:outline-none focus:border-primary-500 transition-all">
+                    <select name="title" required onblur="window.validateField(this)" class="w-full text-sm px-3 py-2 border border-white/10 rounded-lg focus:outline-none focus:border-primary-500 transition-all">
                         <option value="">Select</option>
                         <option value="Mr.">Mr.</option>
                         <option value="Mrs.">Mrs.</option>
@@ -258,20 +241,20 @@ export async function RegisterPage() {
                   
                   <div>
                     <label class="block text-sm font-medium mb-2">First Name *</label>
-                    <input type="text" name="first_name" required onblur="window.validateField(this)" class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-primary-500 transition-all">
+                    <input type="text" name="first_name" required onblur="window.validateField(this)" class="w-full text-sm px-3 py-2 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-primary-500 transition-all">
                   </div>
                   <div>
                     <label class="block text-sm font-medium mb-2">Middle Name</label>
-                    <input type="text" name="middle_name" class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-primary-500 transition-all">
+                    <input type="text" name="middle_name" class="w-full text-sm px-3 py-2 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-primary-500 transition-all">
                   </div>
                   <div>
                     <label class="block text-sm font-medium mb-2">Surname *</label>
-                    <input type="text" name="surname" required onblur="window.validateField(this)" class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-primary-500 transition-all">
+                    <input type="text" name="surname" required onblur="window.validateField(this)" class="w-full text-sm px-3 py-2 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-primary-500 transition-all">
                   </div>
 
                   <div>
                     <label class="block text-sm font-medium mb-2">Gender *</label>
-                    <select name="gender" required onblur="window.validateField(this)" class="w-full px-4 py-3 border border-white/10 rounded-lg focus:outline-none focus:border-primary-500 transition-all">
+                    <select name="gender" required onblur="window.validateField(this)" class="w-full text-sm px-3 py-2 border border-white/10 rounded-lg focus:outline-none focus:border-primary-500 transition-all">
                         <option value="">Select Gender</option>
                         <option value="Female">Female</option>
                         <option value="Male">Male</option>
@@ -279,18 +262,18 @@ export async function RegisterPage() {
                   </div>
                    <div>
                     <label class="block text-sm font-medium mb-2">Date of Birth</label>
-                    <input type="date" name="date_of_birth" class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-primary-500 transition-all text-white scheme-dark">
+                    <input type="date" name="date_of_birth" class="w-full text-sm px-3 py-2 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-primary-500 transition-all text-neutral-300 scheme-dark">
                   </div>
                   <div>
                     <label class="block text-sm font-medium mb-2">GhanaCard Number *</label>
-                    <input type="text" name="ghanacard_number" required onblur="window.validateField(this)" placeholder="GHA-000000000-0" class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-primary-500 transition-all">
+                    <input type="text" name="ghanacard_number" required onblur="window.validateField(this)" placeholder="GHA-000000000-0" class="w-full text-sm px-3 py-2 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-primary-500 transition-all">
                   </div>
                   
                   <!-- Photo Upload -->
                    <div class="md:col-span-3">
                     <label class="block text-sm font-medium mb-2">Passport Photo</label>
                     <div class="flex items-center gap-4">
-                        <input type="file" name="photo" id="photo-input" onchange="window.handlePhotoChange(event)" accept=".jpg,.jpeg,.png" class="flex-grow px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-primary-500 transition-all file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary-500/10 file:text-primary-500 hover:file:bg-primary-500/20">
+                        <input type="file" name="photo" id="photo-input" onchange="window.handlePhotoChange(event)" accept=".jpg,.jpeg,.png" class="flex-grow text-sm px-3 py-2 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-primary-500 transition-all file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary-500/10 file:text-primary-500 hover:file:bg-primary-500/20">
                         <button type="button" id="remove-photo-btn" onclick="window.removePhoto()" class="hidden px-4 py-3 rounded-lg border border-red-500/20 text-red-500 hover:bg-red-500/10 transition-colors text-sm font-bold uppercase tracking-wider">
                             Remove
                         </button>
@@ -306,11 +289,11 @@ export async function RegisterPage() {
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label class="block text-sm font-medium mb-2">Mobile Number *</label>
-                      <input type="tel" name="mobile" required onblur="window.validateField(this)" class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-primary-500 transition-all">
+                      <input type="tel" name="mobile" required onblur="window.validateField(this)" class="w-full text-sm px-3 py-2 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-primary-500 transition-all">
                     </div>
                      <div>
                       <label class="block text-sm font-medium mb-2">Email Address *</label>
-                      <input type="email" name="email" required onblur="window.validateField(this)" class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-primary-500 transition-all">
+                      <input type="email" name="email" required onblur="window.validateField(this)" class="w-full text-sm px-3 py-2 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-primary-500 transition-all">
                     </div>
                 </div>
             </div>
@@ -321,15 +304,15 @@ export async function RegisterPage() {
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                     <div>
                       <label class="block text-sm font-medium mb-2">Institution (MDA/MMDA) *</label>
-                      <input type="text" name="institution" required onblur="window.validateField(this)" class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-primary-500 transition-all">
+                      <input type="text" name="institution" required onblur="window.validateField(this)" class="w-full text-sm px-3 py-2 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-primary-500 transition-all">
                     </div>
                     <div>
                       <label class="block text-sm font-medium mb-2">Designation *</label>
-                      <input type="text" name="designation" required onblur="window.validateField(this)" class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-primary-500 transition-all">
+                      <input type="text" name="designation" required onblur="window.validateField(this)" class="w-full text-sm px-3 py-2 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-primary-500 transition-all">
                     </div>
                      <div>
                       <label class="block text-sm font-medium mb-2">Region *</label>
-                      <select name="region" required onblur="window.validateField(this)" class="w-full px-4 py-3 border border-white/10 rounded-lg focus:outline-none focus:border-primary-500 transition-all">
+                      <select name="region" required onblur="window.validateField(this)" class="w-full text-sm px-3 py-2 border border-white/10 rounded-lg focus:outline-none focus:border-primary-500 transition-all">
                         <option value="">Select Region</option>
                         <option value="Greater Accra">Greater Accra</option>
                         <option value="Ashanti">Ashanti</option>
@@ -353,7 +336,7 @@ export async function RegisterPage() {
                 
                 <div class="mb-6">
                     <label class="block text-sm font-medium mb-2">Skills/Expertise</label>
-                    <textarea name="skills" rows="3" class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-primary-500 transition-all"></textarea>
+                    <textarea name="skills" rows="3" class="w-full text-sm px-3 py-2 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-primary-500 transition-all"></textarea>
                 </div>
 
                 <!-- Professional Memberships -->
@@ -378,7 +361,7 @@ export async function RegisterPage() {
             </div>
 
             <div class="flex gap-4 pt-4">
-                <button type="button" onclick="window.resetRegistrationForm()" class="px-6 py-3 rounded-full border border-white/10 hover:bg-white/10 transition-colors text-white font-medium flex-1">
+                <button type="button" onclick="window.resetRegistrationForm()" class="px-6 py-3 rounded-full border border-white/10 hover:bg-white/10 transition-colors text-neutral-300 font-medium flex-1">
                     Reset
                 </button>
                 <button type="submit" class="btn-custom flex-[2]">

@@ -9,8 +9,17 @@ def send_2fa_code(email):
     # Running as Administrator to bypass guest email sending restrictions
     frappe.set_user("Administrator")
     
-    if not frappe.db.exists("User", email):
+    # Resolve user and real email
+    user_name = frappe.db.get_value("User", email, "name")
+    if not user_name:
+        user_name = frappe.db.get_value("User", {"email": email}, "name")
+        
+    if not user_name:
         frappe.throw("User not found")
+        
+    real_email = frappe.db.get_value("User", user_name, "email")
+    if not real_email:
+         frappe.throw("User has no email address configured")
     
     # Check 2FA method from settings
     method = frappe.db.get_single_value("PS Portal Settings", "two_factor_method") or "Email"
@@ -18,11 +27,11 @@ def send_2fa_code(email):
     # Generate 6-digit code
     code = ''.join(random.choices(string.digits, k=6))
     
-    # Store in a temporary cache
+    # Store in a temporary cache using the INPUT identifier to match verification step
     frappe.cache().set_value(f"2fa_code_{email}", code, expires_in_sec=600)
     
     if method == "SMS":
-        mobile_no = frappe.db.get_value("User", email, "mobile_no")
+        mobile_no = frappe.db.get_value("User", user_name, "mobile_no")
         if not mobile_no:
             frappe.throw("Mobile number not found for this user. Please use Email method or update user profile.")
         
@@ -33,30 +42,88 @@ def send_2fa_code(email):
             frappe.log_error(f"SMS Sending Failed: {str(e)}")
             frappe.throw("Failed to send 2FA code via SMS. Please contact administrator.")
     else:
-        # Send Email
+        # Send Email to the REAL email
         frappe.sendmail(
-            recipients=email,
+            recipients=real_email,
             subject="Your PuSMAG Portal Verification Code",
-            content=f"Your verification code is: {code}. It expires in 10 minutes.",
+            content=f"""
+                <div style="font-family: sans-serif; padding: 20px; color: #333;">
+                    <p>Your PuSMAG Portal verification code is:</p>
+                    <div style="font-size: 32px; font-weight: bold; letter-spacing: 8px; margin: 20px 0; color: #0ea5e9;">
+                        {code}
+                    </div>
+                    <p style="font-size: 14px; color: #666;">This code expires in 10 minutes.</p>
+                </div>
+            """,
             now=True
         )
     
-    # return {"status": "success", "message": f"Code sent via {method}"}
     return {
         "status": "success",
         "method": method,
-        "email": email,
+        "email": real_email, # Return real email for masking
         "mobile_no": mobile_no if method == "SMS" else None
     }
 
 @frappe.whitelist(allow_guest=True)
 def verify_2fa_code(email, code):
-    stored_code = frappe.cache().get_value(f"2fa_code_{email}")
-    if stored_code and str(stored_code) == str(code):
-        frappe.cache().delete_value(f"2fa_code_{email}")
-        return {"status": "success"}
-    else:
-        frappe.throw("Invalid or expired code")
+    if not email or not code:
+        frappe.throw("Email and code are required")
+        
+    cached_code = frappe.cache().get_value(f"2fa_code_{email}")
+    
+    if not cached_code:
+        frappe.throw("Invalid or expired code. Please request a new one.")
+        
+    if str(code) != str(cached_code):
+        frappe.throw("Invalid code. Please try again.")
+        
+    # Code is valid
+    frappe.cache().delete_value(f"2fa_code_{email}")
+    
+    # Log the user in
+    user = frappe.get_doc("User", email)
+    frappe.local.login_manager.login_as(user.name)
+    
+    return {"status": "success", "message": "Logged in successfully"}
+
+@frappe.whitelist(allow_guest=True)
+def reset_password(email):
+    # Always return success to prevent user enumeration
+    try:
+        if frappe.db.exists("User", email):
+            # Run as Administrator to ensure we can trigger the reset email
+            frappe.set_user("Administrator")
+            
+            user = frappe.get_doc("User", email)
+            # Generate the link without sending the default email
+            default_link = user.reset_password(send_email=False)
+            
+            # Replace /update-password with /ps/update-password
+            # link = default_link.replace('/update-password', '/ps/update-password')
+            
+            # Prepare context for the template
+            context = {
+                "user": user,
+                "link": default_link
+            }
+            
+            # Render the custom template
+            email_content = frappe.render_template("pusmag/templates/emails/reset_password.html", context)
+            
+            # Send the email
+            frappe.sendmail(
+                recipients=email,
+                subject="Reset Your Password - PuSMAG",
+                content=email_content,
+                now=True
+            )
+            
+    except Exception as e:
+        # Log error but don't expose it
+        frappe.log_error(f"Password Reset Error: {str(e)}")
+        
+    return {"status": "success", "message": "If an account exists for this email, you will receive password reset instructions shortly."}
 
 @frappe.whitelist()
 def get_member_directory(filters=None, limit=12, offset=0):
@@ -213,8 +280,16 @@ def get_member_details(member_name):
     member = frappe.get_doc("PS Member", member_name)
     return member
 
-@frappe.whitelist()
+@frappe.whitelist(allow_guest=True)
 def get_user_info():
+    # Return minimal info for guest users to avoid 403 error on page refresh
+    # and provide CSRF token for POST requests
+    if frappe.session.user == "Guest":
+        return {
+            "session_user": "Guest",
+            "csrf_token": frappe.sessions.get_csrf_token()
+        }
+    
     user = frappe.get_doc("User", frappe.session.user)
     roles = frappe.get_roles()
     
@@ -228,7 +303,8 @@ def get_user_info():
         "roles": roles,
         "member_name": member.name if member else None,
         "photo": member.photo if member else None,
-        "user_image": user.user_image
+        "user_image": user.user_image,
+        "csrf_token": frappe.sessions.get_csrf_token()
     }
 
 @frappe.whitelist()

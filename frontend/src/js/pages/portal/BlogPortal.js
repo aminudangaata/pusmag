@@ -1,5 +1,11 @@
 import { api } from '../../utils/api.js'
 import { initAnimations } from '../../utils/animations.js'
+import { router } from '../../utils/router.js'
+import { Modal } from '../../components/Modal.js'
+
+window.openBlogPost = (route) => {
+    router.navigate(route);
+}
 
 let currentSearch = '';
 let quill = null;
@@ -27,6 +33,16 @@ window.handlePortalBlogSearch = (event) => {
     currentSearch = event.target.value;
     renderBlogPosts();
 }
+
+window.toggleBlogPortalSearch = () => {
+    const container = document.getElementById('blog-portal-search-container');
+    const arrow = document.getElementById('blog-portal-search-toggle-arrow');
+    if (container) {
+        container.classList.toggle('hidden');
+        if (arrow) arrow.classList.toggle('rotate-180');
+    }
+}
+
 
 window.openBlogModal = async (name = null) => {
     const modal = document.getElementById('blog-modal');
@@ -97,7 +113,7 @@ window.handleImageUpload = async (event) => {
 
     // Check file size (2MB)
     if (file.size > 2 * 1024 * 1024) {
-        alert('File size too large. Maximum 2MB allowed.');
+        Modal.alert('File too large', 'File size too large. Maximum 2MB allowed.');
         return;
     }
 
@@ -223,15 +239,23 @@ async function renderBlogPosts() {
 
         container.innerHTML = posts.map(p => `
             <tr class="border-b border-white/5 hover:bg-white/[0.02] transition-colors">
-                <td class="py-4 px-6">
+                <td class="py-4 px-6 hidden sm:table-cell">
                     <div class="flex items-center gap-3">
                         ${p.post_image ? `<img src="${p.post_image}" class="w-10 h-10 rounded-lg object-cover bg-white/5">` : '<div class="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center text-[10px] text-neutral-600">No Image</div>'}
                         <div>
-                            <a href="/ps/blog/${p.name}" target="_blank" class="font-medium text-white hover:text-primary-500 transition-colors block">
+                            <a href="/blog-news/${p.route || p.name}" onclick="event.preventDefault(); window.openBlogPost('/blog-news/${p.route || p.name}')" class="font-medium text-neutral-300 hover:text-primary-500 transition-colors block cursor-pointer">
                                 ${p.post_title}
                             </a>
                             <div class="text-[10px] text-neutral-500 mt-0.5">by ${p.author_name || 'Admin'}</div>
                         </div>
+                    </div>
+                </td>
+                <td class="py-4 px-6 sm:hidden">
+                    <div>
+                        <a href="/blog-news/${p.route || p.name}" onclick="event.preventDefault(); window.openBlogPost('/blog-news/${p.route || p.name}')" class="font-medium text-neutral-300 hover:text-primary-500 transition-colors block cursor-pointer">
+                            ${p.post_title}
+                        </a>
+                        <div class="text-[10px] text-neutral-500 mt-0.5">by ${p.author_name || 'Admin'}</div>
                     </div>
                 </td>
                 <td class="py-4 px-6 text-xs font-bold uppercase tracking-wider text-neutral-500">${p.post_category}</td>
@@ -250,7 +274,7 @@ async function renderBlogPosts() {
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                             </button>
                         ` : ''}
-                        <button onclick="window.openBlogModal('${p.name}')" class="p-2 text-neutral-400 hover:text-white transition-colors" title="Edit">
+                        <button onclick="window.openBlogModal('${p.name}')" class="p-2 text-neutral-400 hover:text-neutral-300 transition-colors" title="Edit">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                         </button>
                          <button onclick="window.openDeleteModal('${p.name}')" class="p-2 text-red-500 hover:text-red-400 transition-colors" title="${p.delete_requested ? 'Confirm Deletion' : 'Delete'}">
@@ -274,29 +298,48 @@ export async function BlogPortal() {
 
     return `
         <div class="space-y-8 animate-on-scroll">
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
-                <h2 class="text-3xl font-bold">Blog Management</h2>
-                
-                <div class="flex flex-wrap items-center gap-4">
-                    <div class="relative min-w-[300px]">
-                        <input type="text" placeholder="Search blog posts..." 
-                               oninput="window.handlePortalBlogSearch(event)"
-                               class="w-full pl-12 pr-4 py-3 glass rounded-xl border border-white/10 focus:outline-none focus:border-primary-500 transition-all">
-                        <svg class="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                    </div>
-
-                    <button onclick="window.openBlogModal()" class="btn-custom">
-                        <span class="inner flex items-center gap-2">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                            New Post
-                        </span>
-                    </button>
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold text-neutral-300">Blog Management</h2>
+                    <p class="text-neutral-500 text-sm mt-1">Manage and publish your stories</p>
+                </div>
+                <button onclick="window.openBlogModal()" class="btn-custom">
+                    <span class="inner flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                        <span class="hidden sm:inline">New Post</span>
+                    </span>
+                </button>
+            </div>
+            
+            <!-- Mobile Search Toggle -->
+            <button 
+                onclick="window.toggleBlogPortalSearch()"
+                class="md:hidden w-full glass mb-4 px-5 py-3.5 rounded-xl flex items-center justify-between text-neutral-300 font-bold uppercase tracking-widest border border-white/10 shadow-lg shadow-black/20"
+            >
+                <span class="flex items-center gap-2 text-sm">
+                    <svg class="w-4 h-4 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                    Search & Actions
+                </span>
+                <svg id="blog-portal-search-toggle-arrow" class="w-4 h-4 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </button>
+            
+            <!-- Search Container (Hidden on mobile unless toggled) -->
+            <div id="blog-portal-search-container" class="hidden md:flex flex-wrap items-center gap-4">
+                <div class="relative flex-grow md:flex-grow-0 min-w-[300px]">
+                    <input type="text" placeholder="Search blog posts..." 
+                           oninput="window.handlePortalBlogSearch(event)"
+                           class="w-full text-sm pl-12 pr-4 py-3 glass rounded-xl border border-white/10 focus:outline-none focus:border-primary-500 transition-all">
+                    <svg class="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                 </div>
             </div>
             
             <div class="glass rounded-2xl overflow-hidden">
                 <div class="overflow-x-auto">
-                    <table class="w-full text-left">
+                    <table class="w-full text-left min-w-[640px]">
                         <thead class="bg-white/5 text-xs uppercase font-bold tracking-widest text-neutral-400">
                             <tr>
                                 <th class="py-4 px-6">Title</th>
@@ -315,16 +358,16 @@ export async function BlogPortal() {
         </div>
 
         <!-- Blog Post Modal -->
-        <div id="blog-modal" class="fixed inset-0 z-[60] hidden items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-            <div class="glass w-full max-w-4xl rounded-2xl overflow-hidden animate-on-scroll">
+        <div id="blog-modal" class="fixed inset-0 z-[60] hidden items-center justify-center p-4 bg-neutral-900/60 backdrop-blur-sm">
+            <div class="glass w-full max-w-4xl rounded-2xl overflow-hidden animate-on-scroll max-h-[90vh] flex flex-col">
                 <div class="p-6 border-b border-white/10 flex items-center justify-between">
                     <h3 id="blog-modal-title" class="text-xl font-bold">New Blog Post</h3>
-                    <button onclick="window.closeBlogModal()" class="text-neutral-400 hover:text-white transition-colors">
+                    <button onclick="window.closeBlogModal()" class="text-neutral-400 hover:text-neutral-300 transition-colors">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                     </button>
                 </div>
                 
-                <form id="blog-form" onsubmit="window.handleBlogSubmit(event)" class="p-6 space-y-6 max-h-[75vh] overflow-y-auto custom-scrollbar">
+                <form id="blog-form" onsubmit="window.handleBlogSubmit(event)" class="p-4 sm:p-6 space-y-6 max-h-[70vh] overflow-y-auto custom-scrollbar">
                     <input type="hidden" name="name">
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -369,11 +412,11 @@ export async function BlogPortal() {
 
                     <div>
                         <label class="block text-sm font-medium mb-2 text-neutral-400">Content</label>
-                        <div id="editor-container" class="bg-white/5 border border-white/10 rounded-lg min-h-[400px] text-white"></div>
+                        <div id="editor-container" class="bg-white/5 border border-white/10 rounded-b-lg min-h-[250px] sm:min-h-[400px] text-neutral-300"></div>
                     </div>
                     
                     <div class="flex justify-end gap-4 pt-4">
-                        <button type="button" onclick="window.closeBlogModal()" class="px-6 py-2 text-neutral-400 hover:text-white transition-colors">Cancel</button>
+                        <button type="button" onclick="window.closeBlogModal()" class="px-6 py-2 text-neutral-400 hover:text-neutral-300 transition-colors">Cancel</button>
                         <button type="submit" class="btn-custom">
                             <span class="inner">Save Post</span>
                         </button>
@@ -383,7 +426,7 @@ export async function BlogPortal() {
         </div>
 
         <!-- Custom Delete Confirmation Modal -->
-        <div id="delete-modal" class="fixed inset-0 z-[70] hidden items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+        <div id="delete-modal" class="fixed inset-0 z-[70] hidden items-center justify-center p-4 bg-neutral-900/60 backdrop-blur-sm">
             <div class="glass w-full max-w-md rounded-2xl overflow-hidden animate-on-scroll">
                 <div class="p-8 text-center space-y-6">
                     <div class="w-20 h-20 bg-red-500/10 rounded-full flex items-center justify-center mx-auto">
@@ -397,7 +440,7 @@ export async function BlogPortal() {
                         <button id="confirm-delete-btn" onclick="window.handleDeleteConfirm()" class="btn-custom w-full bg-red-600 hover:bg-red-500 border-red-500/50">
                             <span class="inner">Delete Post</span>
                         </button>
-                        <button onclick="window.closeDeleteModal()" class="px-6 py-3 text-neutral-400 hover:text-white transition-colors text-sm font-medium">Cancel</button>
+                        <button onclick="window.closeDeleteModal()" class="px-6 py-3 text-neutral-400 hover:text-neutral-300 transition-colors text-sm font-medium">Cancel</button>
                     </div>
                 </div>
             </div>

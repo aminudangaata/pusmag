@@ -4,17 +4,30 @@ const API_BASE_URL = window.location.origin
 class APIClient {
     constructor(baseURL) {
         this.baseURL = baseURL
+        this.csrfToken = null
     }
 
     async request(endpoint, options = {}) {
-        const url = endpoint.startsWith('http') ? endpoint : `${this.baseURL}/api/method/${endpoint}`
+        const isExternal = endpoint.startsWith('http');
+        const url = isExternal ? endpoint : `${this.baseURL}/api/method/${endpoint}`
+
+        const headers = isExternal ? {} : {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+        };
+
+        // For internal POST requests, ensure Content-Type and CSRF token are set
+        if (!isExternal && options.method === 'POST') {
+            headers['Content-Type'] = 'application/json';
+            const csrfToken = this.getCSRFToken();
+            if (csrfToken) {
+                headers['X-Frappe-CSRF-Token'] = csrfToken;
+            }
+        }
 
         const defaultOptions = {
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            credentials: 'include',
+            headers,
+            credentials: isExternal ? 'omit' : 'include',
             ...options,
         }
 
@@ -26,14 +39,22 @@ class APIClient {
                 try {
                     const errorData = await response.json();
                     if (errorData.exception) {
-                        // Extract message from exception string if it's there
-                        errorMessage = errorData.exception.split(':').pop().trim();
+                        // Check if it's an authentication error
+                        if (errorData.exception.includes('AuthenticationError')) {
+                            errorMessage = 'Invalid email or password. Please try again.';
+                        } else {
+                            // Extract message from exception string if it's there
+                            errorMessage = errorData.exception.split(':').pop().trim();
+                        }
                     } else if (errorData._server_messages) {
                         const messages = JSON.parse(errorData._server_messages);
                         errorMessage = JSON.parse(messages[0]).message;
                     }
                 } catch (e) {
                     // Fallback to default status message
+                    if (response.status === 401) {
+                        errorMessage = 'Invalid email or password. Please try again.';
+                    }
                 }
                 throw new Error(errorMessage);
             }
@@ -79,6 +100,35 @@ class APIClient {
 
     async getStatistics() {
         return this.get('pusmag.my_scripts.pusmag.get_statistics')
+    }
+
+    async getVerseOfTheDay() {
+        try {
+            // Get list of surahs (with caching to avoid redundant requests)
+            if (!this._surahsCache) {
+                this._surahsCache = await this.request('https://quranapi.pages.dev/api/surah.json');
+            }
+            const surahs = this._surahsCache;
+            if (!Array.isArray(surahs) || surahs.length === 0) return null;
+
+            // Pick a surah based on today's date
+            const date = new Date();
+            const seed = date.getFullYear() * 10000 + (date.getMonth() + 1) * 100 + date.getDate();
+
+            const surahIndex = seed % surahs.length;
+            const surah = surahs[surahIndex];
+            const surahNo = surahIndex + 1;
+
+            // Use a different transformation for ayah to ensure more varied selection.
+            // Shifting the seed with a prime multiplier and surah constant.
+            const ayahNo = ((seed * 31 + surahNo) % surah.totalAyah) + 1;
+
+            // Fetch the specific verse
+            return await this.request(`https://quranapi.pages.dev/api/${surahNo}/${ayahNo}.json`);
+        } catch (error) {
+            console.error('Quran API failed:', error);
+            return null;
+        }
     }
 
     // Events/Programmes APIs
@@ -148,6 +198,10 @@ class APIClient {
         return this.post('pusmag.my_scripts.pusmag_portal.verify_2fa_code', { email, code })
     }
 
+    async resetPassword(email) {
+        return this.post('pusmag.my_scripts.pusmag_portal.reset_password', { email })
+    }
+
     async getCurrentUser() {
         // Frappe doesn't have a direct "get current user" in api/method/login usually.
         // We can use a whitelisted method or check frappe.session in backend.
@@ -155,7 +209,13 @@ class APIClient {
     }
 
     async getUserInfo() {
-        return this.get('pusmag.my_scripts.pusmag_portal.get_user_info')
+        const info = await this.get('pusmag.my_scripts.pusmag_portal.get_user_info')
+        if (info && info.csrf_token) {
+            this.csrfToken = info.csrf_token
+            // Also sync to window for global scripts
+            window.csrf_token = info.csrf_token
+        }
+        return info
     }
 
     async getPortalStats() {
@@ -236,21 +296,37 @@ class APIClient {
 
     async uploadFile(file) {
         const formData = new FormData();
-        formData.append('file', file);
-        formData.append('is_private', 0); // Publicly accessible images for blog
+        formData.append('file', file, file.name);
+        formData.append('file_name', file.name);
+        formData.append('from_form', '1');
+        formData.append('is_private', '0');
         formData.append('folder', 'Home/Attachments');
 
         const url = `${this.baseURL}/api/method/upload_file`;
 
         const response = await fetch(url, {
             method: 'POST',
+            headers: {
+                'X-Frappe-CSRF-Token': this.getCSRFToken() || ''
+            },
             body: formData,
-            credentials: 'include',
-            // Do not set Content-Type header, fetch will set it properly with boundary
+            credentials: 'include'
         });
 
         if (!response.ok) {
-            throw new Error('File upload failed');
+            let errorMessage = 'File upload failed';
+            try {
+                const errorData = await response.json();
+                if (errorData._server_messages) {
+                    const messages = JSON.parse(errorData._server_messages);
+                    errorMessage = JSON.parse(messages[0]).message;
+                } else if (errorData.message) {
+                    errorMessage = errorData.message;
+                }
+            } catch (e) {
+                errorMessage = `Upload failed with status: ${response.status}`;
+            }
+            throw new Error(errorMessage);
         }
 
         const data = await response.json();
@@ -258,6 +334,33 @@ class APIClient {
             return data.message.file_url;
         }
         throw new Error('File upload failed: No file URL returned');
+    }
+
+    getCSRFToken() {
+        if (this.csrfToken) {
+            return this.csrfToken
+        }
+
+        if (window.csrf_token && window.csrf_token !== '{{ csrf_token }}') {
+            return window.csrf_token;
+        }
+
+        // Fallback to cookie
+        const cookie = document.cookie
+            .split('; ')
+            .find(row => row.startsWith('frappe_csrftoken='));
+
+        if (cookie) {
+            return cookie.split('=')[1];
+        }
+
+        // Try to find it in the meta tag if available
+        const meta = document.querySelector('meta[name="csrf-token"]');
+        if (meta) {
+            return meta.getAttribute('content');
+        }
+
+        return null;
     }
 }
 

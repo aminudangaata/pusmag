@@ -73,11 +73,11 @@ export async function RegistrationsPortal() {
 
     return `
         <div class="space-y-8 animate-on-scroll">
-            <h2 class="text-3xl font-bold">Pending Registrations</h2>
+            <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold">Pending Registrations</h2>
             
             <div class="glass rounded-2xl overflow-hidden">
                 <div class="overflow-x-auto">
-                    <table class="w-full text-left">
+                    <table class="w-full text-left min-w-[768px]">
                         <thead class="bg-white/5 text-xs uppercase font-bold tracking-widest text-neutral-400">
                             <tr>
                                 <th class="py-4 px-6">Name</th>

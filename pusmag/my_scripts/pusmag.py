@@ -240,11 +240,12 @@ def get_blog_post(post_id):
     """Returns single blog post details"""
     try:
         # Try to get by route first, then by name
+        # We use frappe.db.get_value to bypass strict permission checks for public content
         post = None
         if frappe.db.exists("PS Blog Post", {"route": post_id}):
-            post = frappe.get_doc("PS Blog Post", {"route": post_id})
+            post = frappe.db.get_value("PS Blog Post", {"route": post_id}, ["name", "post_title", "post_content", "post_category", "post_author", "published_date", "post_image", "route"], as_dict=1)
         elif frappe.db.exists("PS Blog Post", post_id):
-            post = frappe.get_doc("PS Blog Post", post_id)
+            post = frappe.db.get_value("PS Blog Post", post_id, ["name", "post_title", "post_content", "post_category", "post_author", "published_date", "post_image", "route"], as_dict=1)
         
         if not post:
             return {}
