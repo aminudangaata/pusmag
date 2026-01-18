@@ -136,11 +136,7 @@ export function Navbar(currentPath) {
             ${isPortalVisible ? `<a href="${getPath('/portal')}" class="block py-3 text-sm font-medium hover:text-neutral-300 transition-colors border-b border-white/5">Portal</a>` : ''}
             <button onclick="window.handleLogout()" class="cursor-pointer block py-3 text-sm font-medium text-red-500 hover:text-red-400 transition-colors">Logout</button>
           ` : `
-            <a href="${getPath('/register')}" class="block mt-4">
-                <span class="btn-custom inline-block">
-                <span class="inner">Register</span>
-                </span>
-            </a>
+            <a href="${getPath('/register')}" class="block py-3 text-sm font-medium hover:text-neutral-300 transition-colors border-b border-white/5">Register</a>
             <a href="${getPath('/login')}" class="block py-3 text-sm font-medium text-neutral-400 hover:text-neutral-300 transition-colors">Login</a>
           `}
         </div>

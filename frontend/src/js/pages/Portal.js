@@ -194,7 +194,7 @@ export async function PortalPage(params) {
                     </div>
                     ` : ''}
 
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="grid grid-cols-1 ${!isMemberOnly ? 'md:grid-cols-3' : 'md:grid-cols-2'} gap-6">
                         <div class="glass p-4 rounded-xl border-l-4 border-primary-500">
                             <p class="text-neutral-400 text-xs mb-1 uppercase tracking-wider font-bold">Total Members</p>
                             <h3 class="text-5xl font-semibold">${stats.total_members}</h3>

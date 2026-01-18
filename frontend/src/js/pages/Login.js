@@ -96,7 +96,7 @@ window.handle2FASubmit = async (event) => {
 
         // Success! Get user info and redirect
         router.user = await api.getUserInfo();
-        router.navigate('/portal');
+        router.navigate('/portal/dashboard');
 
     } catch (error) {
         messageEl.textContent = error.message || "Invalid code. Please try again.";

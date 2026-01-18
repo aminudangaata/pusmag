@@ -177,7 +177,7 @@ def get_pending_registrations():
         frappe.throw("Not authorized", frappe.PermissionError)
     
     return frappe.get_all("PS Member Registration",
-        fields=["name", "first_name", "surname", "email_address", "institution", "designation", "creation"],
+        fields=["name", "first_name", "surname", "email_address", "institution", "designation", "DATE(creation) as creation"],
         filters={"status": ""},
         order_by="creation desc"
     )

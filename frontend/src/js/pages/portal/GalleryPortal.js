@@ -298,7 +298,7 @@ export async function GalleryPortal() {
                             </div>
                         </div>
 
-                        <div class="pt-6">
+                        <div class="px-8 pb-12 pt-6">
                             <button type="submit" id="gallery-submit-btn" class="btn-custom w-full" disabled>
                                 <span class="inner">Add to Gallery</span>
                             </button>
@@ -324,7 +324,7 @@ export async function GalleryPortal() {
                             <!-- Staged files list -->
                         </div>
 
-                        <div class="pt-6">
+                        <div class="px-8 pb-12 pt-6">
                             <button onclick="window.startBulkUpload()" id="start-bulk-upload-btn" class="btn-custom w-full hidden">
                                 <span class="inner">Start Upload</span>
                             </button>

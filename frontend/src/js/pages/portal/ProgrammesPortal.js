@@ -1,5 +1,6 @@
 import { api } from '../../utils/api.js'
 import { initAnimations } from '../../utils/animations.js'
+import { formatDateShort } from '../../utils/helpers.js'
 
 let programmes = [];
 let editTarget = null;
@@ -190,7 +191,7 @@ async function renderProgrammes() {
                     <span class="ml-2 text-[10px] uppercase font-bold text-neutral-500 tracking-widest">${p.category}</span>
                 </td>
                 <td class="py-4 px-6">
-                    <p class="text-sm font-medium text-neutral-300">${p.start_date ? new Date(p.start_date).toLocaleDateString() : 'N/A'}</p>
+                    <p class="text-sm font-medium text-neutral-300 whitespace-nowrap">${formatDateShort(p.start_date)}</p>
                 </td>
                 <td class="py-4 px-6 text-right">
                     <div class="flex justify-end gap-2">

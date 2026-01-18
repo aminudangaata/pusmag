@@ -1,4 +1,5 @@
 import { api } from '../../utils/api.js'
+import { formatDateShort } from '../../utils/helpers.js'
 
 window.approveRegistration = async (name) => {
     if (!confirm(`Are you sure you want to approve this registration? This will create a user account and member record.`)) return;
@@ -47,7 +48,7 @@ async function renderRegistrations() {
                     <div class="font-medium">${r.institution}</div>
                     <div class="text-xs text-neutral-500">${r.designation}</div>
                 </td>
-                <td class="py-4 px-6 text-xs text-neutral-500">${new Date(r.creation).toLocaleDateString()}</td>
+                <td class="py-4 px-6 text-xs text-neutral-500 whitespace-nowrap">${formatDateShort(r.creation)}</td>
                 <td class="py-4 px-6 text-right">
                     <div class="flex justify-end gap-2">
                         <button onclick="window.approveRegistration('${r.name}')" 

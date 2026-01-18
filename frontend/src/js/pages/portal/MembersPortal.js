@@ -145,7 +145,7 @@ export async function MembersPortal() {
             </button>
             
             <!-- Filters Container (Hidden on mobile unless toggled) -->
-            <div id="member-filters-container" class="hidden lg:flex flex-wrap items-center gap-4">
+            <div id="member-filters-container" class="hidden lg:flex flex-wrap items-center justify-end gap-4">
                 <div class="relative min-w-[300px] group flex-grow lg:flex-grow-0">
                     <input type="text" placeholder="Search by name, institution..." 
                            oninput="window.handleMemberSearch(event)"

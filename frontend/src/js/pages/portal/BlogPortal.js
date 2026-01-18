@@ -2,6 +2,7 @@ import { api } from '../../utils/api.js'
 import { initAnimations } from '../../utils/animations.js'
 import { router } from '../../utils/router.js'
 import { Modal } from '../../components/Modal.js'
+import { formatDateShort } from '../../utils/helpers.js'
 
 window.openBlogPost = (route) => {
     router.navigate(route);
@@ -243,7 +244,7 @@ async function renderBlogPosts() {
                     <div class="flex items-center gap-3">
                         ${p.post_image ? `<img src="${p.post_image}" class="w-10 h-10 rounded-lg object-cover bg-white/5">` : '<div class="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center text-[10px] text-neutral-600">No Image</div>'}
                         <div>
-                            <a href="/blog-news/${p.route || p.name}" onclick="event.preventDefault(); window.openBlogPost('/blog-news/${p.route || p.name}')" class="font-medium text-neutral-300 hover:text-primary-500 transition-colors block cursor-pointer">
+                            <a href="/blog-news/${p.route || p.name}" onclick="event.preventDefault(); window.openBlogPost('/blog-news/${p.route || p.name}')" class="font-medium text-sm text-neutral-300 hover:text-primary-500 transition-colors block cursor-pointer">
                                 ${p.post_title}
                             </a>
                             <div class="text-[10px] text-neutral-500 mt-0.5">by ${p.author_name || 'Admin'}</div>
@@ -252,7 +253,7 @@ async function renderBlogPosts() {
                 </td>
                 <td class="py-4 px-6 sm:hidden">
                     <div>
-                        <a href="/blog-news/${p.route || p.name}" onclick="event.preventDefault(); window.openBlogPost('/blog-news/${p.route || p.name}')" class="font-medium text-neutral-300 hover:text-primary-500 transition-colors block cursor-pointer">
+                        <a href="/blog-news/${p.route || p.name}" onclick="event.preventDefault(); window.openBlogPost('/blog-news/${p.route || p.name}')" class="font-medium text-sm text-neutral-300 hover:text-primary-500 transition-colors block cursor-pointer">
                             ${p.post_title}
                         </a>
                         <div class="text-[10px] text-neutral-500 mt-0.5">by ${p.author_name || 'Admin'}</div>
@@ -266,7 +267,7 @@ async function renderBlogPosts() {
                     ${p.verified ? '<span class="ml-2 px-2 py-1 rounded-full bg-blue-500/10 text-blue-500 text-[10px] font-bold uppercase">Verified</span>' : ''}
                     ${p.delete_requested ? '<div class="mt-2 inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-red-500/10 text-red-500 text-[10px] font-bold uppercase border border-red-500/20 animate-pulse"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg> Deletion Requested</div>' : ''}
                 </td>
-                <td class="py-4 px-6 text-xs text-neutral-500">${p.published_date ? new Date(p.published_date).toLocaleDateString() : 'N/A'}</td>
+                <td class="py-4 px-6 text-xs text-neutral-500 whitespace-nowrap">${formatDateShort(p.published_date)}</td>
                 <td class="py-4 px-6 text-right">
                     <div class="flex justify-end gap-2">
                         ${p.delete_requested && router.user.roles.includes('PuSMAG Admin') ? `
@@ -332,7 +333,7 @@ export async function BlogPortal() {
                 <div class="relative flex-grow md:flex-grow-0 min-w-[300px]">
                     <input type="text" placeholder="Search blog posts..." 
                            oninput="window.handlePortalBlogSearch(event)"
-                           class="w-full text-sm pl-12 pr-4 py-3 glass rounded-xl border border-white/10 focus:outline-none focus:border-primary-500 transition-all">
+                           class="w-full text-xs pl-12 pr-4 py-3 glass rounded-xl border border-white/10 focus:outline-none focus:border-primary-500 transition-all">
                     <svg class="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                 </div>
             </div>

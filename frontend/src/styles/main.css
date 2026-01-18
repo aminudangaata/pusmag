@@ -91,7 +91,7 @@
   border-radius: 9999px;
   overflow: hidden;
   background: linear-gradient(to bottom, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.05));
-  box-shadow: 0 0 25px rgba(var(--primary-500), 0.3), 0 8px 40px rgba(var(--primary-500), 0.15);
+  box-shadow: 0 0 15px rgba(var(--primary-500), 0.3), 0 8px 40px rgba(var(--primary-500), 0.15);
 }
 
 .btn-custom:hover:not(:disabled) {
