@@ -264,6 +264,22 @@ class APIClient {
         return this.post('pusmag.my_scripts.pusmag_portal.cancel_delete_request', { name })
     }
 
+    async publishBlogPost(name, verified = null, published = null) {
+        return this.post('pusmag.my_scripts.pusmag_portal.publish_blog_post', { name, verified, published })
+    }
+
+    async requestContactAccess(memberName) {
+        return this.post('pusmag.my_scripts.pusmag_portal.request_contact_access', { member_name: memberName })
+    }
+
+    async getContactAccessRequests() {
+        return this.get('pusmag.my_scripts.pusmag_portal.get_contact_access_requests')
+    }
+
+    async respondToContactRequest(requestName, action, reason = '') {
+        return this.post('pusmag.my_scripts.pusmag_portal.respond_to_contact_request', { request_name: requestName, action, reason })
+    }
+
     async getMemberDetails(memberName) {
         return this.get('pusmag.my_scripts.pusmag_portal.get_member_details', { member_name: memberName })
     }

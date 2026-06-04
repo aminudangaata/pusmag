@@ -388,12 +388,51 @@ def get_contact_info():
 # Registration APIs
 
 @frappe.whitelist(allow_guest=True)
-def submit_registration(first_name, surname, email, mobile, institution, designation, region, **kwargs):
+def submit_registration(**kwargs):
     """Handles member registration form submission"""
     try:
+        # Support both direct kwargs (from JSON body) and frappe.form_dict (fallback)
+        # This handles cases where the JSON body isn't parsed into positional args correctly
+        form_data = dict(frappe.form_dict)
+        form_data.update(kwargs)
+        # Remove internal Frappe keys
+        form_data.pop("cmd", None)
+        form_data.pop("_", None)
+
+        # Extract required fields
+        first_name = form_data.get("first_name") or ""
+        surname = form_data.get("surname") or ""
+        email = form_data.get("email") or ""
+        mobile = form_data.get("mobile") or ""
+        institution = form_data.get("institution") or ""
+        designation = form_data.get("designation") or ""
+        region = form_data.get("region") or ""
+        title = form_data.get("title") or ""
+        gender = form_data.get("gender") or ""
+        date_of_birth = form_data.get("date_of_birth") or ""
+        ghanacard_number = form_data.get("ghanacard_number") or ""
+
         # Validate required fields
-        if not all([first_name, surname, email, mobile, institution, designation, region]):
-            frappe.throw(_("All required fields must be filled"))
+        missing = []
+        if not first_name: missing.append("First Name")
+        if not surname: missing.append("Surname")
+        if not email: missing.append("Email")
+        if not mobile: missing.append("Mobile")
+        if not institution: missing.append("Institution")
+        if not designation: missing.append("Designation")
+        if not region: missing.append("Region")
+        if not title: missing.append("Title")
+        if not gender: missing.append("Gender")
+        if not date_of_birth: missing.append("Date of Birth")
+        if not ghanacard_number: missing.append("GhanaCard Number")
+
+        if missing:
+            frappe.throw(_(f"The following required fields are missing: {', '.join(missing)}"))
+
+        # Resilience: Add " Region" suffix if missing but exists in the database
+        if region and not frappe.db.exists("Region of Ghana", region):
+            if not region.endswith(" Region") and frappe.db.exists("Region of Ghana", region + " Region"):
+                region = region + " Region"
 
         # Create PS Member Registration document
         doc_data = {
@@ -405,16 +444,16 @@ def submit_registration(first_name, surname, email, mobile, institution, designa
             "institution": institution,
             "designation": designation,
             "region": region,
-            "title": kwargs.get("title", ""),
-            "middle_name": kwargs.get("middle_name", ""),
-            "gender": kwargs.get("gender", ""),
-            "date_of_birth": kwargs.get("date_of_birth", ""),
-            "ghanacard_number": kwargs.get("ghanacard_number", ""),
-            "skills": kwargs.get("skills", ""),
+            "title": title,
+            "middle_name": form_data.get("middle_name", ""),
+            "gender": gender,
+            "date_of_birth": date_of_birth,
+            "ghanacard_number": ghanacard_number,
+            "skills": form_data.get("skills", ""),
         }
 
         # Handle Professional Memberships
-        prof_memberships = kwargs.get("professional_memberships")
+        prof_memberships = form_data.get("professional_memberships")
         if prof_memberships:
             if isinstance(prof_memberships, str):
                 try:
@@ -428,7 +467,7 @@ def submit_registration(first_name, surname, email, mobile, institution, designa
         doc.insert(ignore_permissions=True)
 
         # Handle Photo Upload
-        photo_data = kwargs.get("photo")
+        photo_data = form_data.get("photo")
         if photo_data and isinstance(photo_data, dict) and photo_data.get("data") and photo_data.get("filename"):
             from frappe.utils.file_manager import save_file
             try:
@@ -439,19 +478,21 @@ def submit_registration(first_name, surname, email, mobile, institution, designa
                     dt="PS Member Registration",
                     dn=doc.name,
                     is_private=0,
-                    decode=True 
+                    decode=True
                 )
                 doc.db_set("photo", file_doc.file_url)
             except Exception as e:
                 frappe.log_error(f"Error saving photo for {doc.name}: {str(e)}")
 
         frappe.db.commit()
-        
+
         return {
             "success": True,
             "message": "Registration submitted successfully! We will contact you soon.",
             "registration_id": doc.name
         }
+    except frappe.ValidationError:
+        raise
     except Exception as e:
         frappe.log_error(f"Error submitting registration: {str(e)}")
         frappe.throw(_("An error occurred while processing your registration"))

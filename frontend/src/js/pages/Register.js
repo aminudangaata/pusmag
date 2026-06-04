@@ -79,8 +79,10 @@ window.removePhoto = () => {
 }
 
 window.handleRegistrationSubmit = async (event) => {
-  event.preventDefault();
-  const form = event.target;
+  if (event && event.preventDefault) {
+    event.preventDefault();
+  }
+  const form = document.getElementById('registration-form');
   const formMessage = document.getElementById('form-message');
 
   // Check validity first for custom alert
@@ -177,19 +179,12 @@ window.handleRegistrationSubmit = async (event) => {
   try {
     await api.submitRegistration(data);
 
-    formMessage.textContent = 'Thank you for registering! We will contact you soon.';
-    formMessage.className = 'text-center p-4 rounded-lg bg-green-500/10 border border-green-500/20 text-green-500 mb-6';
-    formMessage.classList.remove('hidden');
     window.resetRegistrationForm();
-
-    // Scroll to message
-    formMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    Modal.success('Registration Successful', 'Thank you for registering! We will review your application and contact you soon.');
 
   } catch (error) {
     console.error(error);
-    formMessage.textContent = error.message || 'Sorry, there was an error processing your registration.';
-    formMessage.className = 'text-center p-4 rounded-lg bg-red-500/10 border border-red-500/20 text-red-500 mb-6';
-    formMessage.classList.remove('hidden');
+    Modal.alert('Registration Failed', error.message || 'Sorry, there was an error processing your registration.');
   } finally {
     btn.innerHTML = originalText;
     btn.disabled = false;
@@ -214,9 +209,7 @@ export async function RegisterPage() {
         <div class="container max-w-4xl mx-auto px-6">
           <div id="form-message" class="hidden"></div>
           
-          <form id="registration-form" onsubmit="window.handleRegistrationSubmit(event)" novalidate class="glass rounded-xl p-8 space-y-8 animate-on-scroll">
-            
-            
+          <form id="registration-form" onsubmit="try { window.handleRegistrationSubmit(event); } catch(e) { console.error('Form Submit Error:', e); } return false;" novalidate class="glass rounded-xl p-8 space-y-8 animate-on-scroll">
 
             <!-- Personal Details -->
             <div>
@@ -261,8 +254,8 @@ export async function RegisterPage() {
                     </select>
                   </div>
                    <div>
-                    <label class="block text-sm font-medium mb-2">Date of Birth</label>
-                    <input type="date" name="date_of_birth" class="w-full text-sm px-3 py-2 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-primary-500 transition-all text-neutral-300 scheme-dark">
+                    <label class="block text-sm font-medium mb-2">Date of Birth *</label>
+                    <input type="date" name="date_of_birth" required onblur="window.validateField(this)" class="w-full text-sm px-3 py-2 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-primary-500 transition-all text-neutral-300 scheme-dark">
                   </div>
                   <div>
                     <label class="block text-sm font-medium mb-2">GhanaCard Number *</label>
@@ -314,22 +307,22 @@ export async function RegisterPage() {
                       <label class="block text-sm font-medium mb-2">Region *</label>
                       <select name="region" required onblur="window.validateField(this)" class="w-full text-sm px-3 py-2 border border-white/10 rounded-lg focus:outline-none focus:border-primary-500 transition-all">
                         <option value="">Select Region</option>
-                        <option value="Greater Accra">Greater Accra</option>
-                        <option value="Ashanti">Ashanti</option>
-                        <option value="Western">Western</option>
-                        <option value="Eastern">Eastern</option>
-                        <option value="Central">Central</option>
-                        <option value="Northern">Northern</option>
-                        <option value="Upper East">Upper East</option>
-                        <option value="Upper West">Upper West</option>
-                        <option value="Volta">Volta</option>
-                        <option value="Bono">Bono</option>
-                        <option value="Bono East">Bono East</option>
-                        <option value="Ahafo">Ahafo</option>
-                        <option value="Savannah">Savannah</option>
-                        <option value="North East">North East</option>
-                        <option value="Oti">Oti</option>
-                        <option value="Western North">Western North</option>
+                        <option value="Greater Accra Region">Greater Accra</option>
+                        <option value="Ashanti Region">Ashanti</option>
+                        <option value="Western Region">Western</option>
+                        <option value="Eastern Region">Eastern</option>
+                        <option value="Central Region">Central</option>
+                        <option value="Northern Region">Northern</option>
+                        <option value="Upper East Region">Upper East</option>
+                        <option value="Upper West Region">Upper West</option>
+                        <option value="Volta Region">Volta</option>
+                        <option value="Bono Region">Bono</option>
+                        <option value="Bono East Region">Bono East</option>
+                        <option value="Ahafo Region">Ahafo</option>
+                        <option value="Savannah Region">Savannah</option>
+                        <option value="North East Region">North East</option>
+                        <option value="Oti Region">Oti</option>
+                        <option value="Western North Region">Western North</option>
                       </select>
                     </div>
                 </div>

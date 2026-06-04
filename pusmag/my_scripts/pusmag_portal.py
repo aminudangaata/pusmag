@@ -127,7 +127,8 @@ def reset_password(email):
 
 @frappe.whitelist()
 def get_member_directory(filters=None, limit=12, offset=0):
-    if "PuSMAG Member" not in frappe.get_roles():
+    roles = frappe.get_roles()
+    if "PuSMAG Member" not in roles and "PuSMAG Admin" not in roles:
         frappe.throw("Not authorized", frappe.PermissionError)
     
     query_filters = {}
@@ -266,19 +267,76 @@ def delete_blog_post(name):
 def cancel_delete_request(name):
     if "PuSMAG Admin" not in frappe.get_roles():
         frappe.throw("Not authorized", frappe.PermissionError)
-        
+
     post = frappe.get_doc("PS Blog Post", name)
     post.delete_requested = 0
     post.save()
     return {"status": "success", "message": "Deletion request cancelled"}
 
 @frappe.whitelist()
-def get_member_details(member_name):
-    if "PuSMAG Member" not in frappe.get_roles():
+def publish_blog_post(name, verified=None, published=None):
+    if "PuSMAG Admin" not in frappe.get_roles():
         frappe.throw("Not authorized", frappe.PermissionError)
-        
+
+    post = frappe.get_doc("PS Blog Post", name)
+
+    if verified is not None:
+        post.verified = frappe.utils.cint(verified)
+    if published is not None:
+        post.published = frappe.utils.cint(published)
+
+    post.save()
+    return {"status": "success", "verified": post.verified, "published": post.published}
+
+@frappe.whitelist()
+def get_member_details(member_name):
+    roles = frappe.get_roles()
+    if "PuSMAG Member" not in roles and "PuSMAG Admin" not in roles:
+        frappe.throw("Not authorized", frappe.PermissionError)
+
     member = frappe.get_doc("PS Member", member_name)
-    return member
+    res = member.as_dict()
+
+    viewer = frappe.session.user
+    is_admin = "PuSMAG Admin" in roles
+    viewer_email = frappe.db.get_value("User", viewer, "email")
+    is_self = (member.email_address == viewer_email)
+
+    if is_admin or is_self:
+        res["contact_access"] = "self_or_admin"
+        return res
+
+    # Determine access state from most recent request
+    latest = frappe.db.sql("""
+        SELECT name, status, expiry_datetime, modified
+        FROM `tabPS Contact Access Request`
+        WHERE requester = %s AND member = %s
+        ORDER BY requested_datetime DESC
+        LIMIT 1
+    """, (viewer, member_name), as_dict=True)
+
+    contact_access = "none"
+    if latest:
+        req = latest[0]
+        now = now_datetime()
+        if req.status == "Approved":
+            if req.expiry_datetime and now < req.expiry_datetime:
+                contact_access = "approved"
+            # else expired → "none"
+        elif req.status == "Pending":
+            contact_access = "pending"
+        elif req.status == "Rejected":
+            cooldown_until = add_to_date(req.modified, days=1)
+            contact_access = "rejected_cooldown" if now < cooldown_until else "rejected"
+
+    res["contact_access"] = contact_access
+
+    # Strip private contact fields unless access is granted
+    if contact_access != "approved":
+        res.pop("email_address", None)
+        res.pop("mobile_number", None)
+
+    return res
 
 @frappe.whitelist(allow_guest=True)
 def get_user_info():
@@ -401,6 +459,188 @@ def save_gallery_image(image_data):
 def delete_gallery_image(name):
     if "PuSMAG Admin" not in frappe.get_roles():
         frappe.throw("Not authorized", frappe.PermissionError)
-    
+
     frappe.delete_doc("PS Gallery", name)
     return True
+
+# ── Contact Access Request flow ────────────────────────────────────────────────
+
+@frappe.whitelist()
+def request_contact_access(member_name):
+    roles = frappe.get_roles()
+    if "PuSMAG Member" not in roles:
+        frappe.throw("Not authorized", frappe.PermissionError)
+    if "PuSMAG Admin" in roles:
+        frappe.throw("Admins can view contact info directly")
+
+    viewer = frappe.session.user
+    viewer_email = frappe.db.get_value("User", viewer, "email")
+    member = frappe.get_doc("PS Member", member_name)
+
+    if member.email_address == viewer_email:
+        frappe.throw("You cannot request access to your own contact info")
+
+    now = now_datetime()
+
+    latest = frappe.db.sql("""
+        SELECT name, status, expiry_datetime, modified
+        FROM `tabPS Contact Access Request`
+        WHERE requester = %s AND member = %s
+        ORDER BY requested_datetime DESC
+        LIMIT 1
+    """, (viewer, member_name), as_dict=True)
+
+    if latest:
+        req = latest[0]
+        if req.status == "Approved" and req.expiry_datetime and now < req.expiry_datetime:
+            return {"status": "already_approved"}
+        if req.status == "Pending":
+            return {"status": "already_pending"}
+        if req.status == "Rejected":
+            cooldown_until = add_to_date(req.modified, days=1)
+            if now < cooldown_until:
+                return {"status": "cooldown", "cooldown_until": str(cooldown_until)}
+
+    member_owner = frappe.db.get_value("User", {"email": member.email_address}, "name")
+    if not member_owner:
+        frappe.throw("This member has no linked user account")
+
+    req_doc = frappe.new_doc("PS Contact Access Request")
+    req_doc.requester = viewer
+    req_doc.member = member_name
+    req_doc.member_owner = member_owner
+    req_doc.status = "Pending"
+    req_doc.requested_datetime = now
+    req_doc.save(ignore_permissions=True)
+
+    _notify_contact_request(member_owner, viewer, member)
+
+    return {"status": "requested"}
+
+
+@frappe.whitelist()
+def get_contact_access_requests():
+    user = frappe.session.user
+    user_email = frappe.db.get_value("User", user, "email")
+    member_name = frappe.db.get_value("PS Member", {"email_address": user_email}, "name")
+    if not member_name:
+        return []
+
+    requests = frappe.get_all(
+        "PS Contact Access Request",
+        fields=["name", "requester", "status", "requested_datetime"],
+        filters={"member": member_name, "status": "Pending"},
+        order_by="requested_datetime desc"
+    )
+
+    for req in requests:
+        req.requester_name = frappe.db.get_value("User", req.requester, "full_name") or req.requester
+
+    return requests
+
+
+@frappe.whitelist()
+def respond_to_contact_request(request_name, action, reason=None):
+    req = frappe.get_doc("PS Contact Access Request", request_name)
+
+    user = frappe.session.user
+    user_email = frappe.db.get_value("User", user, "email")
+    member = frappe.get_doc("PS Member", req.member)
+
+    if member.email_address != user_email:
+        frappe.throw("Not authorized to respond to this request", frappe.PermissionError)
+
+    if action == "approve":
+        expiry_days = frappe.utils.cint(
+            frappe.db.get_single_value("PS Portal Settings", "contact_access_expiry_days") or 7
+        )
+        req.status = "Approved"
+        req.expiry_datetime = add_to_date(now_datetime(), days=expiry_days)
+    elif action == "reject":
+        req.status = "Rejected"
+        req.rejection_reason = reason or ""
+    else:
+        frappe.throw("Invalid action")
+
+    req.save(ignore_permissions=True)
+    _notify_contact_response(req.requester, action, member, req)
+
+    return {"status": "success"}
+
+
+def _notify_contact_request(member_owner, requester, member):
+    method = frappe.db.get_single_value("PS Portal Settings", "two_factor_method") or "Email"
+    requester_name = frappe.db.get_value("User", requester, "full_name") or requester
+    member_full_name = f"{member.first_name} {member.surname}"
+
+    msg = f"{requester_name} has requested access to your contact information on the PuSMAG Portal. Log in to approve or decline."
+
+    try:
+        if method == "SMS":
+            mobile = frappe.db.get_value("User", member_owner, "mobile_no")
+            if mobile:
+                from frappe.core.doctype.sms_settings.sms_settings import send_sms
+                send_sms([mobile], msg)
+        else:
+            owner_email = frappe.db.get_value("User", member_owner, "email")
+            frappe.sendmail(
+                recipients=owner_email,
+                subject="Contact Info Access Request – PuSMAG Portal",
+                content=f"""
+                    <div style="font-family:sans-serif;padding:20px;color:#333;">
+                        <p>Hello {member_full_name},</p>
+                        <p><strong>{requester_name}</strong> has requested access to your contact information on the PuSMAG Portal.</p>
+                        <p>Log in to your portal to approve or decline this request.</p>
+                        <p style="font-size:12px;color:#888;margin-top:24px;">PuSMAG Portal &mdash; Contact Access System</p>
+                    </div>
+                """,
+                now=True
+            )
+    except Exception as e:
+        frappe.log_error(f"Contact request notification failed: {str(e)}")
+
+
+def _notify_contact_response(requester, action, member, req):
+    method = frappe.db.get_single_value("PS Portal Settings", "two_factor_method") or "Email"
+    requester_user = frappe.get_doc("User", requester)
+    member_full_name = f"{member.first_name} {member.surname}"
+
+    if action == "approve":
+        expiry_str = frappe.utils.format_datetime(req.expiry_datetime, "MMMM d, yyyy")
+        subject = f"Contact Access Approved – {member_full_name}"
+        body = f"Your request to view {member_full_name}'s contact information has been approved. Access expires on {expiry_str}."
+        html_body = f"""
+            <div style="font-family:sans-serif;padding:20px;color:#333;">
+                <p>Hello {requester_user.full_name},</p>
+                <p>Your request to view <strong>{member_full_name}</strong>'s contact information has been <strong style="color:#16a34a;">approved</strong>.</p>
+                <p>Access expires on <strong>{expiry_str}</strong>. After that you will need to request access again.</p>
+                <p style="font-size:12px;color:#888;margin-top:24px;">PuSMAG Portal &mdash; Contact Access System</p>
+            </div>
+        """
+    else:
+        reason_line = f"<p>Reason: {req.rejection_reason}</p>" if req.rejection_reason else ""
+        subject = f"Contact Access Request Declined – {member_full_name}"
+        body = f"Your request to view {member_full_name}'s contact information was not approved.{' Reason: ' + req.rejection_reason if req.rejection_reason else ''}"
+        html_body = f"""
+            <div style="font-family:sans-serif;padding:20px;color:#333;">
+                <p>Hello {requester_user.full_name},</p>
+                <p>Your request to view <strong>{member_full_name}</strong>'s contact information was <strong style="color:#dc2626;">not approved</strong>.</p>
+                {reason_line}
+                <p style="font-size:12px;color:#888;margin-top:24px;">PuSMAG Portal &mdash; Contact Access System</p>
+            </div>
+        """
+
+    try:
+        if method == "SMS":
+            if requester_user.mobile_no:
+                from frappe.core.doctype.sms_settings.sms_settings import send_sms
+                send_sms([requester_user.mobile_no], body)
+        else:
+            frappe.sendmail(
+                recipients=requester_user.email,
+                subject=f"PuSMAG Portal – {subject}",
+                content=html_body,
+                now=True
+            )
+    except Exception as e:
+        frappe.log_error(f"Contact response notification failed: {str(e)}")

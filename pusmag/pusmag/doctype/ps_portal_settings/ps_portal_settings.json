@@ -5,7 +5,8 @@
     "doctype": "DocType",
     "engine": "InnoDB",
     "field_order": [
-        "two_factor_method"
+        "two_factor_method",
+        "contact_access_expiry_days"
     ],
     "fields": [
         {
@@ -15,6 +16,13 @@
             "options": "Email\nSMS",
             "reqd": 1,
             "default": "Email"
+        },
+        {
+            "fieldname": "contact_access_expiry_days",
+            "fieldtype": "Int",
+            "label": "Contact Access Expiry (Days)",
+            "description": "How many days an approved contact access request remains valid before expiring.",
+            "default": "7"
         }
     ],
     "issingle": 1,

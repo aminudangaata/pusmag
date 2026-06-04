@@ -224,6 +224,24 @@ window.handleCancelDelete = async (name) => {
     }
 }
 
+window.handleVerifyToggle = async (name, currentVerified) => {
+    try {
+        await api.publishBlogPost(name, currentVerified ? 0 : 1, null);
+        renderBlogPosts();
+    } catch (e) {
+        alert("Error updating verification: " + e.message);
+    }
+}
+
+window.handlePublishToggle = async (name, currentPublished) => {
+    try {
+        await api.publishBlogPost(name, null, currentPublished ? 0 : 1);
+        renderBlogPosts();
+    } catch (e) {
+        alert("Error updating publication: " + e.message);
+    }
+}
+
 async function renderBlogPosts() {
     const container = document.getElementById('blog-posts-container');
     if (!container) return;
@@ -270,6 +288,14 @@ async function renderBlogPosts() {
                 <td class="py-4 px-6 text-xs text-neutral-500 whitespace-nowrap">${formatDateShort(p.published_date)}</td>
                 <td class="py-4 px-6 text-right">
                     <div class="flex justify-end gap-2">
+                        ${router.user.roles.includes('PuSMAG Admin') ? `
+                            <button onclick="window.handleVerifyToggle('${p.name}', ${p.verified ? 1 : 0})" class="p-2 ${p.verified ? 'text-blue-500 hover:text-blue-400' : 'text-neutral-500 hover:text-blue-500'} transition-colors" title="${p.verified ? 'Unverify' : 'Verify'}">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            </button>
+                            <button onclick="window.handlePublishToggle('${p.name}', ${p.published ? 1 : 0})" class="p-2 ${p.published ? 'text-emerald-500 hover:text-emerald-400' : 'text-neutral-500 hover:text-emerald-500'} transition-colors" title="${p.published ? 'Unpublish' : 'Publish'}">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                            </button>
+                        ` : ''}
                         ${p.delete_requested && router.user.roles.includes('PuSMAG Admin') ? `
                             <button onclick="window.handleCancelDelete('${p.name}')" class="p-2 text-emerald-500 hover:text-emerald-400 transition-colors" title="Cancel Deletion Request">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
@@ -278,7 +304,7 @@ async function renderBlogPosts() {
                         <button onclick="window.openBlogModal('${p.name}')" class="p-2 text-neutral-400 hover:text-neutral-300 transition-colors" title="Edit">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                         </button>
-                         <button onclick="window.openDeleteModal('${p.name}')" class="p-2 text-red-500 hover:text-red-400 transition-colors" title="${p.delete_requested ? 'Confirm Deletion' : 'Delete'}">
+                        <button onclick="window.openDeleteModal('${p.name}')" class="p-2 text-red-500 hover:text-red-400 transition-colors" title="${p.delete_requested ? 'Confirm Deletion' : 'Delete'}">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                         </button>
                     </div>

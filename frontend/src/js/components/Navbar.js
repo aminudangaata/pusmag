@@ -22,7 +22,7 @@ export function Navbar(currentPath) {
       ],
     },
     { path: getPath('/programmes'), label: 'Programmes' },
-    { path: getPath('/blog-news'), label: 'Blog' },
+    { path: getPath('/blog-news'), label: 'Blog/News' },
     { path: getPath('/gallery'), label: 'Gallery' },
     { path: getPath('/contact'), label: 'Contact' },
   ]

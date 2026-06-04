@@ -8,6 +8,7 @@ import { RegistrationsPortal } from './portal/RegistrationsPortal.js'
 import { MemberDetail } from './portal/MemberDetail.js'
 import { ProgrammesPortal } from './portal/ProgrammesPortal.js'
 import { GalleryPortal } from './portal/GalleryPortal.js'
+import { ContactRequestsPortal } from './portal/ContactRequestsPortal.js'
 
 // window.handleLogout moved to router.js/main.js for global access
 
@@ -89,9 +90,12 @@ export async function PortalPage(params) {
         }
     }
 
+    const hasMemberProfile = !!(user && user.member_name);
+
     const sections = [
         { id: 'dashboard', label: 'Dashboard', icon: 'grid' },
         { id: 'members', label: 'Members', icon: 'users', roles: ['PuSMAG Member', 'PuSMAG Blogger', 'PuSMAG Admin'] },
+        { id: 'contact-requests', label: 'Contact Requests', icon: 'lock', roles: ['PuSMAG Member', 'PuSMAG Blogger'], memberOnly: true },
         { id: 'blog', label: 'Blog Posts', icon: 'file-text', roles: ['PuSMAG Blogger', 'PuSMAG Admin'] },
         { id: 'registrations', label: 'Registrations', icon: 'user-plus', roles: ['PuSMAG Admin'] },
         { id: 'programmes', label: 'Programmes', icon: 'calendar', roles: ['PuSMAG Admin'] },
@@ -110,6 +114,7 @@ export async function PortalPage(params) {
             case 'user-plus': return 'M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z';
             case 'calendar': return 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z';
             case 'image': return 'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z';
+            case 'lock': return 'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z';
             default: return '';
         }
     };
@@ -121,6 +126,7 @@ export async function PortalPage(params) {
         case 'registrations': sectionContent = await RegistrationsPortal(); break;
         case 'programmes': sectionContent = await ProgrammesPortal(); break;
         case 'gallery': sectionContent = await GalleryPortal(); break;
+        case 'contact-requests': sectionContent = await ContactRequestsPortal(); break;
         case 'member': sectionContent = await MemberDetail(params); break;
         case 'dashboard':
         default:
@@ -251,7 +257,11 @@ export async function PortalPage(params) {
                 
                 <div class="p-6 flex-grow overflow-y-auto">
                     <nav class="space-y-1">
-                        ${sections.filter(s => !s.roles || s.roles.some(r => user.roles.includes(r))).map(s => `
+                        ${sections.filter(s => {
+                            if (s.roles && !s.roles.some(r => user.roles.includes(r))) return false;
+                            if (s.memberOnly && !hasMemberProfile) return false;
+                            return true;
+                        }).map(s => `
                             <a href="/portal/${s.id}" 
                                class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${section === s.id ? 'bg-primary-500/20 text-primary-500 border border-primary-500/20' : 'text-neutral-400 hover:text-neutral-300 hover:bg-white/5'}">
                                 ${getIcon(s.icon)}
