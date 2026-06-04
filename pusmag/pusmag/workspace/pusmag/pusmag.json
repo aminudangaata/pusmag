@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"-Y002zXQNI\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Verse Quote\",\"col\":12}},{\"id\":\"CZNygk0M4y\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Members\",\"col\":4}},{\"id\":\"RgqVtGbaj2\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Contributions\",\"col\":4}},{\"id\":\"dUmnktPh2D\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Registrations\",\"col\":4}}]",
+ "content": "[{\"id\":\"-Y002zXQNI\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Verse Quote\",\"col\":12}},{\"id\":\"CZNygk0M4y\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Members\",\"col\":4}},{\"id\":\"RgqVtGbaj2\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Contributions\",\"col\":4}},{\"id\":\"dUmnktPh2D\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Registrations\",\"col\":4}},{\"id\":\"qdNMvWkGPi\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Blog Post\",\"col\":4}},{\"id\":\"AK2xJRjdcY\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Gallery\",\"col\":4}},{\"id\":\"dFs1i8Lk8g\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Contact Access request\",\"col\":3}}]",
  "creation": "2023-12-31 07:38:05.958842",
  "custom_blocks": [
   {
@@ -18,7 +18,7 @@
  "is_hidden": 0,
  "label": "PuSMAG",
  "links": [],
- "modified": "2023-12-31 09:24:03.245331",
+ "modified": "2026-06-04 19:26:55.704932",
  "modified_by": "Administrator",
  "module": "PuSMAG",
  "name": "PuSMAG",
@@ -33,8 +33,32 @@
   {
    "color": "Grey",
    "doc_view": "List",
+   "label": "Blog Post",
+   "link_to": "PS Blog Post",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
    "label": "Members",
    "link_to": "PS Member",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Contact Access request",
+   "link_to": "PS Contact Access Request",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Gallery",
+   "link_to": "PS Gallery",
    "stats_filter": "[]",
    "type": "DocType"
   },
